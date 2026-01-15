@@ -1,6 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
-import HomePage from './pages/home-page'
-import NotFoundPage from './pages/not-found-page'
+import HomePage from '@/pages/home'
+import NotFoundPage from '@/pages/not-found'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
   return (
