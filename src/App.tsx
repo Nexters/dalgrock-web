@@ -1,20 +1,9 @@
-import HomePage from '@/pages/home'
-import NotFoundPage from '@/pages/not-found'
-import { Route, Routes } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
+
+import { router } from './routes'
 
 function App() {
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={<HomePage />}
-      />
-      <Route
-        path="*"
-        element={<NotFoundPage />}
-      />
-    </Routes>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App
