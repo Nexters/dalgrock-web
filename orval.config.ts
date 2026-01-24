@@ -11,17 +11,12 @@ export default defineConfig({
     output: {
       target: './src/apis/generated',
       schemas: './src/apis/generated/models',
-      client: 'react-query',
+      client: 'axios',
       mode: 'tags-split',
       override: {
         mutator: {
           path: './src/apis/instance.ts',
           name: 'api'
-        },
-        query: {
-          useQuery: true,
-          useMutation: true,
-          version: 5
         }
       }
     },
