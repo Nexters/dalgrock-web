@@ -7,16 +7,16 @@ description: 프로젝트 코딩 컨벤션 (네이밍 규칙, 폴더 구조, 컴
 
 ## 네이밍 규칙
 
-| 대상 | 규칙 | 예시 |
-|------|------|------|
-| 컴포넌트 | PascalCase | `UserProfile.tsx` |
-| 훅 | camelCase + use 접두사 | `useAuth.ts` |
-| 유틸 함수 | camelCase | `formatDate.ts` |
-| 상수 | SCREAMING_SNAKE_CASE | `API_BASE_URL` |
-| 타입/인터페이스 | PascalCase | `UserData`, `RecordItem` |
-| 파일 (컴포넌트) | PascalCase | `RecordCard.tsx` |
-| 파일 (비컴포넌트) | camelCase | `utils.ts`, `constants.ts` |
-| 파일 (shadcn/ui) | kebab-case | `alert-dialog.tsx` |
+| 대상              | 규칙                   | 예시                       |
+| ----------------- | ---------------------- | -------------------------- |
+| 컴포넌트          | PascalCase             | `UserProfile.tsx`          |
+| 훅                | camelCase + use 접두사 | `useAuth.ts`               |
+| 유틸 함수         | camelCase              | `formatDate.ts`            |
+| 상수              | SCREAMING_SNAKE_CASE   | `API_BASE_URL`             |
+| 타입/인터페이스   | PascalCase             | `UserData`, `RecordItem`   |
+| 파일 (컴포넌트)   | PascalCase             | `RecordCard.tsx`           |
+| 파일 (비컴포넌트) | camelCase              | `utils.ts`, `constants.ts` |
+| 파일 (shadcn/ui)  | kebab-case             | `alert-dialog.tsx`         |
 
 > shadcn/ui 컴포넌트는 kebab-case로 파일명이 자동 생성되므로 그대로 사용.
 
@@ -62,10 +62,12 @@ src/
 - 관련 코드를 한 곳에 모아 응집도 향상
 
 **`_components/` 사용 시:**
+
 - 해당 페이지에서만 사용하는 컴포넌트
 - 페이지 로직과 강하게 결합된 컴포넌트
 
 **`components/` 사용 시:**
+
 - 여러 페이지에서 재사용하는 컴포넌트
 - 범용 UI 요소
 
@@ -97,9 +99,7 @@ function RecordCard({ record, onEdit }: RecordCardProps) {
   }
 
   // 렌더
-  return (
-    <div>...</div>
-  )
+  return <div>...</div>
 }
 
 // 5. Export
@@ -119,10 +119,12 @@ export default RecordCard
 자명한 코드를 우선하고 주석은 최소화한다.
 
 **허용:**
+
 - `// TODO:` 주석
 - 복잡한 비즈니스 로직에 대한 "왜" 설명
 
 **금지:**
+
 - JSDoc 주석 (함수/컴포넌트 설명)
 - 코드가 하는 일을 그대로 설명하는 주석
 - JSX 내 당연한 설명 주석
