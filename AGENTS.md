@@ -36,12 +36,12 @@ src/
 
 ## 네이밍 규칙
 
-| 대상 | 규칙 | 예시 |
-|------|------|------|
-| 컴포넌트 | PascalCase | `UserProfile.tsx` |
-| 훅 | camelCase + use | `useAuth.ts` |
-| 상수 | SCREAMING_SNAKE_CASE | `API_BASE_URL` |
-| shadcn/ui | kebab-case | `alert-dialog.tsx` |
+| 대상      | 규칙                 | 예시               |
+| --------- | -------------------- | ------------------ |
+| 컴포넌트  | PascalCase           | `UserProfile.tsx`  |
+| 훅        | camelCase + use      | `useAuth.ts`       |
+| 상수      | SCREAMING_SNAKE_CASE | `API_BASE_URL`     |
+| shadcn/ui | kebab-case           | `alert-dialog.tsx` |
 
 ## 커밋 메시지
 
@@ -99,3 +99,11 @@ const {
 
 - PRD: `docs/PRD.md`
 - 상세 규칙: `.cursor/rules/`
+
+## 작업 완료 시
+
+코드 작업을 완료하면 아래 명령어를 실행하여 코드 품질을 확인합니다:
+
+```bash
+pnpm lint && pnpm prettier --write .
+```
