@@ -127,7 +127,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    min-width: var(--min-viewport);
     max-width: var(--max-viewport);
     min-height: 100dvh;
     margin-inline: auto;
