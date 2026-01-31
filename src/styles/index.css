@@ -45,6 +45,10 @@
 }
 
 :root {
+  /* Viewport constraints (mobile-first) */
+  --min-viewport: 344px;
+  --max-viewport: 576px;
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -117,7 +121,14 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    /* NOTE: 개발 시에만 구분을 위해 임시 적용 */
+    @apply bg-muted;
+  }
   body {
     @apply bg-background text-foreground;
+    max-width: var(--max-viewport);
+    min-height: 100dvh;
+    margin-inline: auto;
   }
 }
