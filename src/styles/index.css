@@ -11,6 +11,17 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Gray 색상 스케일 */
+  --color-gray-0: #ffffff;
+  --color-gray-50: #c8ced8;
+  --color-gray-100: #9ea4b2;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #6b7181;
+  --color-gray-400: #494e5a;
+  --color-gray-500: #262930;
+  --color-gray-600: #16171c;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
