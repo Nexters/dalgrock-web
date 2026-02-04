@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { ArrowLeftIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { ArrowIcon } from './icons'
 
 interface HeaderProps {
   showBackButton?: boolean
@@ -22,11 +22,11 @@ export function Header({
   }
 
   return (
-    <header className="flex h-12 items-center px-4">
+    <header className="flex h-15 items-center px-4 py-2">
       <div className="flex flex-1 justify-start">
         {showBackButton ? (
           <button onClick={handleGoBack}>
-            <ArrowLeftIcon className="size-4" />
+            <ArrowIcon />
           </button>
         ) : (
           leftChild
