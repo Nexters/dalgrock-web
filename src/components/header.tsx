@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { ArrowIcon } from './icons'
+import { useNavigate } from 'react-router-dom'
 
 interface HeaderProps {
+  onBack?: () => void
   showBackButton?: boolean
   leftChild?: ReactNode
   midChild?: ReactNode
@@ -10,6 +11,7 @@ interface HeaderProps {
 }
 
 export function Header({
+  onBack,
   showBackButton = true,
   leftChild,
   midChild,
@@ -18,11 +20,15 @@ export function Header({
   const navigate = useNavigate()
 
   const handleGoBack = () => {
-    navigate(-1)
+    if (onBack) {
+      onBack()
+    } else {
+      navigate(-1)
+    }
   }
 
   return (
-    <header className="flex h-15 items-center px-4 py-2">
+    <header className="sticky top-0 z-10 flex h-15 items-center bg-gray-600 px-4 py-2">
       <div className="flex flex-1 justify-start">
         {showBackButton ? (
           <button onClick={handleGoBack}>
