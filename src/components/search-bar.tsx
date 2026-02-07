@@ -8,17 +8,32 @@ interface SearchBarProps {
   placeholder?: string
   className?: string
   width?: number
+  value?: string
+  onChange?: (value: string) => void
 }
 
 export function SearchBar({
   placeholder = '',
   className,
-  width
+  width,
+  value: controlledValue,
+  onChange
 }: SearchBarProps) {
-  const [value, setValue] = useState('')
+  const [internalValue, setInternalValue] = useState('')
+
+  const isControlled = controlledValue !== undefined
+  const value = isControlled ? controlledValue : internalValue
+
+  const handleChange = (newValue: string) => {
+    if (isControlled) {
+      onChange?.(newValue)
+    } else {
+      setInternalValue(newValue)
+    }
+  }
 
   const handleClear = () => {
-    setValue('')
+    handleChange('')
   }
 
   return (
@@ -34,7 +49,7 @@ export function SearchBar({
           type="text"
           placeholder={placeholder}
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={e => handleChange(e.target.value)}
           className={cn(
             'h-[48px] rounded-lg border-0 bg-transparent pl-9 pr-9 text-white focus-visible:ring-0',
             className

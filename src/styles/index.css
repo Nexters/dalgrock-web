@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin 'tailwind-scrollbar-hide';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -137,7 +138,7 @@
     @apply bg-muted;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gray-600 text-foreground;
     max-width: var(--max-viewport);
     min-height: 100dvh;
     margin-inline: auto;
