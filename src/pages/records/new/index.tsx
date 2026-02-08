@@ -5,7 +5,8 @@ import { AnimatePresence, motion } from 'motion/react'
 import { Header } from '@/components/header'
 import {
   MusicSearchStep,
-  RecordDetailStep,
+  EmotionSelectStep,
+  MemoStep,
   RecordCompleteStep
 } from './_components/funnels'
 
@@ -24,7 +25,7 @@ export interface RecordFormData {
   place: string
 }
 
-type FunnelStep = 'search' | 'detail' | 'complete'
+type FunnelStep = 'search' | 'emotion' | 'memo' | 'complete'
 type Direction = 'forward' | 'backward'
 
 const SLIDE_TRANSITION = {
@@ -85,84 +86,92 @@ function RecordNew() {
     }
   }
 
+  const navigate = (target: FunnelStep, dir: Direction) => {
+    setDirection(dir)
+    setStep(target)
+    if (dir === 'forward') window.scrollTo(0, 0)
+  }
+
   const handleSearchNext = () => {
-    if (musicsField.value.length > 0) {
-      setDirection('forward')
-      setStep('detail')
-      window.scrollTo(0, 0)
-    }
+    if (musicsField.value.length > 0) navigate('emotion', 'forward')
   }
 
-  const handleDetailNext = () => {
-    setDirection('forward')
-    setStep('complete')
-    window.scrollTo(0, 0)
-  }
-
-  const handleDetailBack = () => {
-    setDirection('backward')
-    setStep('search')
-  }
-
-  const headerOnBack = step === 'detail' ? handleDetailBack : undefined
+  const headerOnBack = (() => {
+    if (step === 'emotion') return () => navigate('search', 'backward')
+    if (step === 'memo') return () => navigate('emotion', 'backward')
+    return undefined
+  })()
 
   return (
     <FormProvider {...methods}>
-      <div className="flex min-h-dvh flex-col overflow-x-clip">
+      <div className="flex min-h-dvh flex-col">
         <Header onBack={headerOnBack} />
 
-        <AnimatePresence
-          mode="popLayout"
-          initial={false}
-          custom={direction}>
-          {step === 'search' && (
-            <motion.div
-              key="search"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={SLIDE_TRANSITION}
-              className="flex flex-1 flex-col">
-              <MusicSearchStep
-                selectedMusics={musicsField.value}
-                onMusicToggle={handleMusicToggle}
-                onNext={handleSearchNext}
-              />
-            </motion.div>
-          )}
+        <div className="relative flex flex-1 flex-col overflow-x-clip">
+          <AnimatePresence
+            mode="popLayout"
+            initial={false}
+            custom={direction}>
+            {step === 'search' && (
+              <motion.div
+                key="search"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={SLIDE_TRANSITION}
+                className="flex flex-1 flex-col">
+                <MusicSearchStep
+                  selectedMusics={musicsField.value}
+                  onMusicToggle={handleMusicToggle}
+                  onNext={handleSearchNext}
+                />
+              </motion.div>
+            )}
 
-          {step === 'detail' && (
-            <motion.div
-              key="detail"
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={SLIDE_TRANSITION}
-              className="flex flex-1 flex-col">
-              <RecordDetailStep
-                musics={musicsField.value}
-                onNext={handleDetailNext}
-              />
-            </motion.div>
-          )}
+            {step === 'emotion' && (
+              <motion.div
+                key="emotion"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={SLIDE_TRANSITION}
+                className="flex flex-1 flex-col">
+                <EmotionSelectStep onNext={() => navigate('memo', 'forward')} />
+              </motion.div>
+            )}
 
-          {step === 'complete' && (
-            <motion.div
-              key="complete"
-              variants={fadeVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={FADE_TRANSITION}
-              className="flex flex-1 flex-col">
-              <RecordCompleteStep />
-            </motion.div>
-          )}
-        </AnimatePresence>
+            {step === 'memo' && (
+              <motion.div
+                key="memo"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={SLIDE_TRANSITION}
+                className="flex flex-1 flex-col">
+                <MemoStep onNext={() => navigate('complete', 'forward')} />
+              </motion.div>
+            )}
+
+            {step === 'complete' && (
+              <motion.div
+                key="complete"
+                variants={fadeVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={FADE_TRANSITION}
+                className="flex flex-1 flex-col">
+                <RecordCompleteStep />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </FormProvider>
   )
