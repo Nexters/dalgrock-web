@@ -4,6 +4,7 @@ import { cn } from '@/utils/cn'
 
 interface SelectedMusicItemProps extends Music {
   transparent?: boolean
+  border?: boolean
   onRemove?: () => void
 }
 
@@ -11,12 +12,14 @@ export function SelectedMusicItem({
   title,
   artist,
   transparent = false,
+  border = false,
   onRemove
 }: SelectedMusicItemProps) {
-  return (
+  const content = (
     <div
       className={cn(
-        'flex min-w-[180px] shrink-0 only:w-full only:shrink items-center gap-3 rounded-lg py-[10px] px-3 text-left transition-colors',
+        'flex min-w-[180px] shrink-0 only:w-full only:shrink items-center gap-3 py-[10px] px-3 text-left transition-colors',
+        border ? 'rounded-[7px]' : 'rounded-lg',
         transparent ? 'bg-transparent' : 'bg-gray-600'
       )}>
       <div className="size-7 shrink-0 rounded-md bg-gray-200" />
@@ -37,4 +40,14 @@ export function SelectedMusicItem({
       </button>
     </div>
   )
+
+  if (border) {
+    return (
+      <div className="rounded-[8px] bg-gradient-to-r from-white/10 to-white/5 p-[1px]">
+        {content}
+      </div>
+    )
+  }
+
+  return content
 }
