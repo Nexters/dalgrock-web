@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 
-import { Header } from '@/components/header'
 import { Button } from '@/components/ui/button'
 
 export function RecordCompleteStep() {
@@ -11,9 +10,7 @@ export function RecordCompleteStep() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <Header />
-
+    <>
       <section className="flex flex-1 flex-col items-center px-5 pt-10 pb-6">
         {/* 완료 메시지 */}
         <div className="mb-8 flex flex-col items-center gap-2">
@@ -35,6 +32,6 @@ export function RecordCompleteStep() {
           기록 확인하기
         </Button>
       </div>
-    </div>
+    </>
   )
 }

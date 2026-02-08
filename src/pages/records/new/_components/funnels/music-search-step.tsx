@@ -1,6 +1,6 @@
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 
-import { Header } from '@/components/header'
 import { SearchBar } from '@/components/search-bar'
 import { Button } from '@/components/ui/button'
 import { SearchedMusicItem } from '../searched-music-item'
@@ -44,8 +44,6 @@ export function MusicSearchStep({
 }: MusicSearchStepProps) {
   const [keyword, setKeyword] = useState('')
 
-  const isNextEnabled = selectedMusics.length > 0
-
   // TODO: API 연동 시 useQuery로 변경
   const searchResults = keyword.trim()
     ? MOCK_SEARCH_RESULTS.filter(
@@ -56,9 +54,7 @@ export function MusicSearchStep({
     : []
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <Header />
-
+    <>
       <section className="flex flex-1 flex-col gap-2">
         <div className="px-5 pt-3 pb-2">
           <SearchBar
@@ -69,7 +65,7 @@ export function MusicSearchStep({
         </div>
 
         {/* 검색 결과 */}
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           {!keyword.trim() && (
             <div className="flex flex-1 flex-col items-center justify-center py-16">
               <div className="size-[100px] rounded-lg bg-gray-600" />
@@ -97,36 +93,42 @@ export function MusicSearchStep({
       </section>
 
       {/* 하단 버튼 */}
-      <div className="sticky bottom-0 rounded-t-2xl pt-[2px] bg-[linear-gradient(90deg,rgba(255,255,255,0.2)_0%,rgba(255,255,255,0.08)_50%,rgba(255,255,255,0.2)_100%)] shadow-[2px_-2px_20px_0px_rgba(0,0,0,0.2)]">
-        <div className="rounded-t-[19px] pt-6 pb-8 px-5 bg-[linear-gradient(180deg,rgba(44,46,52,0.7)_0%,#1D1E22_100%)] backdrop-blur-[20px]">
-          {selectedMusics.length > 0 && (
-            <div className="mb-4">
-              <p className="mb-2 text-sm text-gray-100">
-                <span className="text-white">{selectedMusics.length}</span> 곡
-                선택
-              </p>
-              <div className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5">
-                {selectedMusics.map(music => (
-                  <SelectedMusicItem
-                    key={music.id}
-                    {...music}
-                    onRemove={() => onMusicToggle(music)}
-                  />
-                ))}
+      <AnimatePresence>
+        {selectedMusics.length > 0 && (
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 40, stiffness: 300 }}
+            className="sticky bottom-0 rounded-t-2xl pt-[2px] bg-[linear-gradient(90deg,rgba(255,255,255,0.2)_0%,rgba(255,255,255,0.08)_50%,rgba(255,255,255,0.2)_100%)] shadow-[2px_-2px_20px_0px_rgba(0,0,0,0.2)]">
+            <div className="rounded-t-[19px] pt-6 pb-8 px-5 bg-[linear-gradient(180deg,rgba(44,46,52,0.7)_0%,#1D1E22_100%)] backdrop-blur-[20px]">
+              <div className="mb-4">
+                <p className="mb-2 text-sm text-gray-100">
+                  <span className="text-white">{selectedMusics.length}</span> 곡
+                  선택
+                </p>
+                <div className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5">
+                  {selectedMusics.map(music => (
+                    <SelectedMusicItem
+                      key={music.id}
+                      {...music}
+                      onRemove={() => onMusicToggle(music)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
 
-          <Button
-            variant="primary"
-            className="w-full h-[52px]"
-            size="lg"
-            disabled={!isNextEnabled}
-            onClick={onNext}>
-            다음
-          </Button>
-        </div>
-      </div>
-    </div>
+              <Button
+                variant="primary"
+                className="h-[52px] w-full"
+                size="lg"
+                onClick={onNext}>
+                다음
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
