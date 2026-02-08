@@ -1,6 +1,8 @@
 import { Header } from '@/components/header'
-import { ArrowRightIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { WeeklySectionLayout } from './_components/weekly-section-layout'
+import RecordScrollList from './_components/record-scroll-list'
+import { ArrowIcon } from '@/components/icons'
 
 // NOTE: 월 주차별 기록 더미 데이터
 interface Record {
@@ -93,15 +95,7 @@ const MONTHLY_RECORDS: WeeklyRecords[] = [
   {
     week: 4,
     reportId: 'report-2026-01-w4',
-    records: [
-      { id: 'rec-016', title: 'Magnetic', artist: 'ILLIT', date: '2026-01-21' },
-      {
-        id: 'rec-017',
-        title: 'How Sweet',
-        artist: 'NewJeans',
-        date: '2026-01-23'
-      }
-    ]
+    records: []
   },
   {
     week: 5,
@@ -141,33 +135,28 @@ function Records() {
       <Header />
 
       {/* 주차별 기록 */}
-      {MONTHLY_RECORDS.map(weeklyRecord => (
-        <div
-          key={weeklyRecord.week}
-          className="p-4">
-          <div className="my-2 flex items-center justify-between">
-            <p>
-              {weeklyRecord.week}주차 <span>{weeklyRecord.records.length}</span>
-            </p>
+      <div className="flex flex-col gap-6">
+        {MONTHLY_RECORDS.sort((a, b) => b.week - a.week).map(weeklyRecord => (
+          <WeeklySectionLayout key={weeklyRecord.week}>
+            <div className="p-4 flex flex-col gap-4">
+              <div className="my-2 flex items-center justify-between text-gray-0">
+                <p className=" font-bold">{weeklyRecord.week}주차 리포트</p>
 
-            <button
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={() => handleNavigateToReport(weeklyRecord.reportId)}>
-              리포트 <ArrowRightIcon size={16} />
-            </button>
-          </div>
+                <button
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() => handleNavigateToReport(weeklyRecord.reportId)}>
+                  <ArrowIcon direction="right" />
+                </button>
+              </div>
 
-          <div className="overflow-x-scroll scrollbar-hide flex gap-2">
-            {weeklyRecord.records.map(record => (
-              <button
-                key={record.id}
-                className="rounded-full size-20 bg-gray-200 shrink-0 cursor-pointer"
-                onClick={() => handleNavigateToRecord(record.id)}
+              <RecordScrollList
+                records={weeklyRecord.records}
+                onRecordClick={handleNavigateToRecord}
               />
-            ))}
-          </div>
-        </div>
-      ))}
+            </div>
+          </WeeklySectionLayout>
+        ))}
+      </div>
     </div>
   )
 }
