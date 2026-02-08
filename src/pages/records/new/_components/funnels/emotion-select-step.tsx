@@ -1,6 +1,16 @@
+import { useState } from 'react'
 import { useController, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
+import {
+  ConfirmDialog,
+  ConfirmDialogCancel,
+  ConfirmDialogConfirm,
+  ConfirmDialogContent,
+  ConfirmDialogDescription,
+  ConfirmDialogFooter,
+  ConfirmDialogTitle
+} from '@/components/confirm-dialog'
 import type { RecordFormData } from '../../index'
 import { SelectedMusicItem } from '../selected-music-item'
 import { TagSelector } from '../tag-selector'
@@ -29,15 +39,32 @@ const CATEGORISED_EMOTION_TAGS = [
 
 interface EmotionSelectStepProps {
   onNext: () => void
+  onBack: () => void
 }
 
-export function EmotionSelectStep({ onNext }: EmotionSelectStepProps) {
+export function EmotionSelectStep({ onNext, onBack }: EmotionSelectStepProps) {
   const { control } = useFormContext<RecordFormData>()
+  const [isWarningOpen, setIsWarningOpen] = useState(false)
 
   const { field: musicsField } = useController({ name: 'musics', control })
   const { field: emotionsField } = useController({ name: 'emotions', control })
 
   const isNextEnabled = emotionsField.value.length > 0
+  const isLastMusic = musicsField.value.length === 1
+
+  const handleMusicRemove = (musicId: string) => {
+    if (isLastMusic) {
+      setIsWarningOpen(true)
+      return
+    }
+
+    musicsField.onChange(musicsField.value.filter(m => m.id !== musicId))
+  }
+
+  const handleReselectMusic = () => {
+    setIsWarningOpen(false)
+    onBack()
+  }
 
   return (
     <>
@@ -53,6 +80,7 @@ export function EmotionSelectStep({ onNext }: EmotionSelectStepProps) {
               key={music.id}
               border
               {...music}
+              onRemove={() => handleMusicRemove(music.id)}
             />
           ))}
         </div>
@@ -75,6 +103,27 @@ export function EmotionSelectStep({ onNext }: EmotionSelectStepProps) {
           다음
         </Button>
       </div>
+
+      <ConfirmDialog
+        open={isWarningOpen}
+        onOpenChange={setIsWarningOpen}>
+        <ConfirmDialogContent>
+          <ConfirmDialogTitle>
+            음악은 1개 이상 선택이 필요해요
+          </ConfirmDialogTitle>
+          <ConfirmDialogDescription>
+            이 음악을 삭제하고 다시 음악을 선택하시겠어요?
+          </ConfirmDialogDescription>
+          <ConfirmDialogFooter className="mt-4">
+            <ConfirmDialogCancel className="w-[120px]">
+              닫기
+            </ConfirmDialogCancel>
+            <ConfirmDialogConfirm onClick={handleReselectMusic}>
+              음악 다시 선택하기
+            </ConfirmDialogConfirm>
+          </ConfirmDialogFooter>
+        </ConfirmDialogContent>
+      </ConfirmDialog>
     </>
   )
 }

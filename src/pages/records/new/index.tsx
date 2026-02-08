@@ -140,7 +140,10 @@ function RecordNew() {
                 exit="exit"
                 transition={SLIDE_TRANSITION}
                 className="flex flex-1 flex-col">
-                <EmotionSelectStep onNext={() => navigate('memo', 'forward')} />
+                <EmotionSelectStep
+                  onNext={() => navigate('memo', 'forward')}
+                  onBack={() => navigate('search', 'backward')}
+                />
               </motion.div>
             )}
 
