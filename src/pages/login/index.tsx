@@ -1,10 +1,10 @@
+import { API_BASE_URL } from '@/apis/instance'
 import { KakaoIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 function Login() {
   const handleKakaoLogin = () => {
-    // TODO: 카카오 OAuth 로그인 구현
-    console.log('카카오 로그인')
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/kakao`
   }
 
   return (
