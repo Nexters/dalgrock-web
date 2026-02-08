@@ -45,10 +45,10 @@ function TagButton({
       type="button"
       onClick={onClick}
       className={cn(
-        'shrink-0 rounded-full px-3 py-2 text-gray-0 text-xs font-regular transition-colors',
+        'shrink-0 rounded-full px-[14px] py-2  text-sm font-thin transition-colors',
         isSelected
-          ? 'bg-gradient-to-b from-[#73F0DE] to-[#F4DD4B] text-gray-900'
-          : 'bg-[#262930] text-gray-300 hover:bg-[#2f3340]'
+          ? 'bg-gradient-to-b from-[#73F0DE] to-[#F4DD4B] text-gray-600 font-semibold'
+          : 'bg-gray-500 text-gray-0 hover:bg-[#2f3340]'
       )}>
       {tag.label}
     </button>
@@ -86,16 +86,16 @@ export function TagSelector(props: TagSelectorProps) {
 
   if (isCategorizedTags(tags)) {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         {tags.map(category => {
           const [title, categoryTags] = Object.entries(category)[0]
 
           return (
             <div
               key={title}
-              className="flex flex-col gap-2">
-              <span className="text-sm font-semibold text-gray-0">{title}</span>
-              <div className="-mx-5 flex gap-2 overflow-x-auto px-5 scrollbar-hide">
+              className="flex flex-col gap-3">
+              <label className="text-xs font-bold text-gray-100">{title}</label>
+              <div className="flex flex-wrap gap-2">
                 {categoryTags.map(tag => (
                   <TagButton
                     key={tag.id}
@@ -113,7 +113,7 @@ export function TagSelector(props: TagSelectorProps) {
   }
 
   return (
-    <div className="-mx-5 flex gap-2 overflow-x-auto px-5 scrollbar-hide">
+    <div className="flex flex-wrap gap-2">
       {tags.map(tag => (
         <TagButton
           key={tag.id}

@@ -39,7 +39,7 @@ export function Header({
       />
       <header
         className={cn(
-          'sticky top-0 z-10 flex h-15 items-center px-4 py-2 transition-colors duration-200',
+          'sticky top-0 z-10 flex h-15 items-center p-2 transition-colors duration-200',
           isScrolled ? 'bg-[#16171C1A] backdrop-blur-[20px]' : 'bg-gray-600'
         )}>
         <div className="flex flex-1 justify-start">
