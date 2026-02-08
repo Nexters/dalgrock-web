@@ -1,6 +1,6 @@
+import { Settings } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
 
 function HomeTabs() {
@@ -9,7 +9,7 @@ function HomeTabs() {
   const isReports = location.pathname === '/reports'
 
   return (
-    <div className="flex h-[60px] items-end justify-between px-[14px]">
+    <div className="flex h-[60px] items-center justify-between px-5">
       <div className="flex gap-5">
         <Link
           to="/"
@@ -34,11 +34,11 @@ function HomeTabs() {
           )}
         </Link>
       </div>
-      <Button
-        variant="ghost"
-        className="h-auto p-2 text-sm font-medium tracking-tight text-[#878787] hover:bg-transparent hover:text-gray-50">
-        설정
-      </Button>
+      <Link
+        to="/settings"
+        className="p-2">
+        <Settings className="h-6 w-6 text-[#6B7181]" />
+      </Link>
     </div>
   )
 }

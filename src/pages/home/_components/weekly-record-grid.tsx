@@ -1,104 +1,76 @@
 import { Link } from 'react-router-dom'
 
-import { cn } from '@/utils/cn'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
-interface RecordItem {
+interface WeeklyRecordItem {
   date: string
-  label: string
+  dayLabel: string
+  dateLabel: string
   hasRecord: boolean
+  albumImage?: string
 }
 
-interface WeeklyRecordGridProps {
-  title: string
-  count: number
-  records: RecordItem[]
-  isBoldTitle?: boolean
+interface WeeklyRecordSectionProps {
+  weekLabel: string
+  records: WeeklyRecordItem[]
 }
 
-function WeeklyRecordGrid({
-  title,
-  count,
-  records,
-  isBoldTitle = false
-}: WeeklyRecordGridProps) {
+const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일']
+
+function WeeklyRecordSection({ weekLabel, records }: WeeklyRecordSectionProps) {
   return (
-    <div className="px-[14px]">
-      <div className="mb-4 flex items-center gap-2">
-        <span
-          className={cn(
-            'text-sm tracking-tight text-white',
-            isBoldTitle ? 'font-bold' : 'font-medium'
-          )}>
-          {title}
+    <div className="relative">
+      <div className="flex items-center justify-between px-5 pb-4">
+        <span className="text-sm font-bold tracking-[-0.4px] text-white">
+          {weekLabel}
         </span>
-        <span className="text-sm font-extrabold tracking-tight text-white">
-          {count}
-        </span>
+        <Link
+          to="/records"
+          className="text-sm font-medium tracking-[-0.4px] text-[#9EA4B2]">
+          전체보기
+        </Link>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
-        {records.map(record => (
-          <Link
-            key={record.date}
-            to={record.hasRecord ? `/records/${record.date}` : '/records/new'}
-            className={cn(
-              'flex h-[74px] w-[74px] items-center justify-center rounded-full',
-              record.hasRecord ? 'bg-gray-400' : 'bg-gray-500'
-            )}>
-            {!record.hasRecord && (
-              <span className="text-sm font-medium tracking-tight text-gray-300">
-                {record.label}
-              </span>
-            )}
-          </Link>
-        ))}
+      <div className="relative">
+        <ScrollArea className="w-full">
+          <div className="flex gap-4 px-5 pb-4">
+            {records.map((record, index) => (
+              <Link
+                key={record.date}
+                to={
+                  record.hasRecord ? `/records/${record.date}` : '/records/new'
+                }
+                className="flex flex-col items-center gap-2">
+                <div className="flex h-[74px] w-[74px] items-center justify-center rounded-full bg-[#262930]">
+                  {record.hasRecord && record.albumImage ? (
+                    <img
+                      src={record.albumImage}
+                      alt="앨범 커버"
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-sm font-medium text-[#6B7181]">
+                      {record.dateLabel}
+                    </span>
+                  )}
+                </div>
+                <span className="text-sm font-medium text-[#6B7181]">
+                  {DAY_LABELS[index] || record.dayLabel}
+                </span>
+              </Link>
+            ))}
+          </div>
+          <ScrollBar
+            orientation="horizontal"
+            className="invisible"
+          />
+        </ScrollArea>
+
+        <div className="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-gray-600 to-transparent" />
       </div>
     </div>
   )
 }
 
-const thisWeekRecords: RecordItem[] = [
-  { date: '2025-01-13', label: '1월 13일', hasRecord: true },
-  { date: '2025-01-14', label: '1월 14일', hasRecord: true },
-  { date: '2025-01-15', label: '1월 15일', hasRecord: true },
-  { date: '2025-01-16', label: '1월 16일', hasRecord: true },
-  { date: '2025-01-17', label: '1월 17일', hasRecord: false },
-  { date: '2025-01-18', label: '1월 18일', hasRecord: true },
-  { date: '2025-01-19', label: '1월 19일', hasRecord: false },
-  { date: '2025-01-20', label: '1월 20일', hasRecord: false }
-]
-
-const lastWeekRecords: RecordItem[] = [
-  { date: '2025-01-06', label: '1월 6일', hasRecord: true },
-  { date: '2025-01-07', label: '1월 7일', hasRecord: true },
-  { date: '2025-01-08', label: '1월 8일', hasRecord: true },
-  { date: '2025-01-09', label: '1월 9일', hasRecord: true },
-  { date: '2025-01-10', label: '1월 10일', hasRecord: true },
-  { date: '2025-01-11', label: '1월 11일', hasRecord: true },
-  { date: '2025-01-12', label: '1월 12일', hasRecord: true }
-]
-
-function WeeklyRecordSection() {
-  return (
-    <div className="flex flex-col gap-8 py-6">
-      <WeeklyRecordGrid
-        title="이번주"
-        count={5}
-        records={thisWeekRecords}
-        isBoldTitle
-      />
-      <WeeklyRecordGrid
-        title="1월 3주차"
-        count={7}
-        records={lastWeekRecords}
-      />
-      <WeeklyRecordGrid
-        title="1월 2주차"
-        count={7}
-        records={lastWeekRecords}
-      />
-    </div>
-  )
-}
-
-export { WeeklyRecordGrid, WeeklyRecordSection }
+export { WeeklyRecordSection }
+export type { WeeklyRecordItem }
