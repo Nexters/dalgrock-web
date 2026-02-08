@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { defineConfig } from 'orval'
 
-const apiBaseUrl = process.env.VITE_API_BASE_URL || 'https://api.pliview.kr'
+const apiBaseUrl = process.env.VITE_API_BASE_URL || 'https://api-dev.pliview.kr'
 
 export default defineConfig({
   dalgrock: {
