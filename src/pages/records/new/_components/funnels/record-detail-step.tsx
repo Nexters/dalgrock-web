@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useFormContext, useController } from 'react-hook-form'
 
 import { ChevronDownIcon } from '@/components/icons'
-import { Header } from '@/components/header'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormSection } from '../form-section'
@@ -71,17 +70,12 @@ const CATEGORISED_MOMENT_TAGS = [
 
 interface RecordDetailStepProps {
   musics: Music[]
-  onBack: () => void
   onNext: () => void
 }
 
 const INITIAL_VISIBLE_COUNT = 2
 
-export function RecordDetailStep({
-  musics,
-  onBack,
-  onNext
-}: RecordDetailStepProps) {
+export function RecordDetailStep({ musics, onNext }: RecordDetailStepProps) {
   const { control, getValues } = useFormContext<RecordFormData>()
 
   const [isPlaylistExpanded, setIsPlaylistExpanded] = useState(false)
@@ -107,9 +101,7 @@ export function RecordDetailStep({
   }
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <Header onBack={onBack} />
-
+    <>
       <section className="flex flex-1 flex-col gap-6 px-5 pt-3 pb-6">
         {/* 오늘 날짜 */}
         <h1 className="text-xl font-bold text-white">{formatTodayDate()}</h1>
@@ -204,6 +196,6 @@ export function RecordDetailStep({
           기록 완료
         </Button>
       </div>
-    </div>
+    </>
   )
 }
