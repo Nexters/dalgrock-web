@@ -1,7 +1,7 @@
 import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios'
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'https://api.pliview.kr'
+  import.meta.env.VITE_API_BASE_URL || 'https://api-dev.pliview.kr'
 
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
