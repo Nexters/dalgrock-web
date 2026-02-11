@@ -10,7 +10,7 @@ function HomeTabs() {
   const isReports = pathname.startsWith('/reports')
 
   return (
-    <div className="flex h-[60px] items-center justify-between px-5">
+    <div className="h-[60px] pt-2 items-center justify-between px-5">
       <Header
         showBackButton={false}
         leftChild={
