@@ -126,12 +126,19 @@ function Reports() {
     <div className="min-h-dvh bg-gray-600">
       <HomeTabs />
 
-      <MonthSelector
-        month={displayMonth}
-        onPrevMonth={handlePrevMonth}
-        onNextMonth={handleNextMonth}
-        onViewAll={handleViewAll}
-      />
+      <div className="flex items-center justify-between px-5 py-5 ml-4">
+        <MonthSelector
+          month={displayMonth}
+          onPrevMonth={handlePrevMonth}
+          onNextMonth={handleNextMonth}
+        />
+
+        <button
+          onClick={handleViewAll}
+          className="text-[14px] text-[#9EA4B2] pr-4">
+          전체보기
+        </button>
+      </div>
 
       <div className="flex flex-col gap-4 px-5 pb-6">
         {currentReports.length > 0 ? (
