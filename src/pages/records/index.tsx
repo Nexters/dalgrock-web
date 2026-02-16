@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { WeeklySectionLayout } from './_components/weekly-section-layout'
 import RecordScrollList from './_components/record-scroll-list'
 import { ArrowIcon } from '@/components/icons'
+import { useMemo, useState } from 'react'
+import { MonthSelector } from '../reports/_components/month-selector'
 
 // NOTE: 월 주차별 기록 더미 데이터
 interface Record {
@@ -121,6 +123,31 @@ const MONTHLY_RECORDS: WeeklyRecords[] = [
 
 function Records() {
   const navigate = useNavigate()
+  const [year, setYear] = useState(2026)
+  const [month, setMonth] = useState(1)
+  const displayMonth = useMemo(() => {
+    return `${String(year).slice(2)}년 ${month}월`
+  }, [year, month])
+
+  const handlePrevMonth = () => {
+    if (month === 1) {
+      setYear(year - 1)
+      setMonth(12)
+    } else {
+      setMonth(month - 1)
+    }
+  }
+
+  const handleNextMonth = () => {
+    if (month === 12) {
+      setYear(year + 1)
+      setMonth(1)
+    } else {
+      setMonth(month + 1)
+    }
+  }
+
+  // TODO: 선택된 월의 주차별 기록 데이터 가져오는 API 요청
 
   const handleNavigateToReport = (reportId: string) => {
     navigate(`/reports/${reportId}`)
@@ -129,33 +156,61 @@ function Records() {
     navigate(`/records/${recordId}`)
   }
 
+  // TODO: 해당 주차가 오늘 날짜가 포함된 주인지 확인하는 함수 추가
+
   return (
     <div>
-      {/* TODO: 월 선택 Select 추가 */}
       <Header />
 
+      <div className="flex items-center justify-center mb-5">
+        <MonthSelector
+          month={displayMonth}
+          onPrevMonth={handlePrevMonth}
+          onNextMonth={handleNextMonth}
+        />
+      </div>
+
       {/* 주차별 기록 */}
-      <div className="flex flex-col gap-6">
-        {MONTHLY_RECORDS.sort((a, b) => b.week - a.week).map(weeklyRecord => (
-          <WeeklySectionLayout key={weeklyRecord.week}>
-            <div className="p-4 flex flex-col gap-4">
-              <div className="my-2 flex items-center justify-between text-gray-0">
-                <p className=" font-bold">{weeklyRecord.week}주차 리포트</p>
+      <div className="flex flex-col gap-6 px-3 pb-8">
+        {MONTHLY_RECORDS.sort((a, b) => b.week - a.week).map(weeklyRecord => {
+          const isEmpty = weeklyRecord.records.length === 0
+          // TODO: 해당 주차가 오늘 날짜가 포함된 주인지 확인
 
-                <button
-                  className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => handleNavigateToReport(weeklyRecord.reportId)}>
-                  <ArrowIcon direction="right" />
-                </button>
+          return (
+            <WeeklySectionLayout key={weeklyRecord.week}>
+              <div className="px-4 flex flex-col gap-4">
+                <div className="flex items-center justify-between text-gray-0">
+                  {isEmpty ? (
+                    <p className="font-bold">{weeklyRecord.week}주차</p>
+                  ) : (
+                    <>
+                      <p className="font-bold">
+                        {weeklyRecord.week}주차 리포트
+                      </p>
+
+                      <button
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() =>
+                          handleNavigateToReport(weeklyRecord.reportId)
+                        }>
+                        <ArrowIcon
+                          direction="right"
+                          height={24}
+                          width={24}
+                        />
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                <RecordScrollList
+                  records={weeklyRecord.records}
+                  onRecordClick={handleNavigateToRecord}
+                />
               </div>
-
-              <RecordScrollList
-                records={weeklyRecord.records}
-                onRecordClick={handleNavigateToRecord}
-              />
-            </div>
-          </WeeklySectionLayout>
-        ))}
+            </WeeklySectionLayout>
+          )
+        })}
       </div>
     </div>
   )
