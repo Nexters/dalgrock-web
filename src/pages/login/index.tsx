@@ -1,8 +1,22 @@
+import { Navigate } from 'react-router-dom'
+
 import { API_BASE_URL } from '@/apis/instance'
 import { KakaoIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/useAuth'
 
 function Login() {
+  const { isAuthenticated } = useAuth()
+
+  if (isAuthenticated) {
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    )
+  }
+
   const handleKakaoLogin = () => {
     window.location.href = `${API_BASE_URL}/oauth2/authorization/kakao`
   }
