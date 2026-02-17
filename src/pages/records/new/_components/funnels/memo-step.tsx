@@ -55,12 +55,17 @@ export function MemoStep({ onNext }: MemoStepProps) {
             onChange={momentField.onChange}
           />
 
-          <Textarea
-            placeholder="함께 기억하고 싶은 일이나 장소를 기록해 보세요."
-            value={memoField.value}
-            onChange={e => memoField.onChange(e.target.value)}
-            className="p-4 min-h-[52px] resize-none bg-gray-500 border-none text-sm text-gray-0 scrollbar-hide [field-sizing:content]"
-          />
+          <div className="flex flex-col gap-5">
+            <p className="text-lg text-gray-0 font-bold">
+              자유롭게 메모를 추가해 보세요
+            </p>
+            <Textarea
+              placeholder="함께 기억하고 싶은 일이나 장소를 기록해 보세요."
+              value={memoField.value}
+              onChange={e => memoField.onChange(e.target.value)}
+              className="p-4 min-h-[52px] resize-none bg-gray-500 border-none text-sm text-gray-0 scrollbar-hide [field-sizing:content]"
+            />
+          </div>
         </div>
       </section>
 
