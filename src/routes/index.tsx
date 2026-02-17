@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+import { AuthGuard } from '@/components/auth-guard'
 import { Home } from '@/pages/home'
 import { NotFound } from '@/pages/not-found'
 
@@ -8,9 +9,14 @@ import { recordRoutes } from './records'
 import { reportRoutes } from './reports'
 
 export const router = createBrowserRouter([
-  { path: '/', element: <Home /> },
   ...authRoutes,
-  ...recordRoutes,
-  ...reportRoutes,
+  {
+    element: <AuthGuard />,
+    children: [
+      { path: '/', element: <Home /> },
+      ...recordRoutes,
+      ...reportRoutes
+    ]
+  },
   { path: '*', element: <NotFound /> }
 ])
