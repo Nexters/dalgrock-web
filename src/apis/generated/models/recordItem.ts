@@ -5,9 +5,13 @@
  * Pliview API 문서
  * OpenAPI spec version: 1.0.0
  */
+import type { MusicThumbnailItem } from './musicThumbnailItem'
 
 export interface RecordItem {
   recordId?: number
   createdAt?: string
   thumbnail?: string
+  musics?: MusicThumbnailItem[]
+  emotions?: string[]
+  isToday?: boolean
 }
