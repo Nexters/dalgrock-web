@@ -11,7 +11,7 @@ import {
   ConfirmDialogFooter,
   ConfirmDialogTitle
 } from '@/components/confirm-dialog'
-import type { RecordFormData } from '../../index'
+import type { RecordFormData } from '@/types/record'
 import { SelectedMusicItem } from '../selected-music-item'
 import { TagSelector } from '../tag-selector'
 
@@ -38,11 +38,16 @@ const CATEGORISED_EMOTION_TAGS = [
 ] as const
 
 interface EmotionSelectStepProps {
-  onNext: () => void
-  onBack: () => void
+  onComplete: () => void
+  onBack?: () => void
+  submitLabel?: string
 }
 
-export function EmotionSelectStep({ onNext, onBack }: EmotionSelectStepProps) {
+export function EmotionSelectStep({
+  onComplete,
+  onBack,
+  submitLabel = '다음'
+}: EmotionSelectStepProps) {
   const { control } = useFormContext<RecordFormData>()
   const [isWarningOpen, setIsWarningOpen] = useState(false)
 
@@ -63,7 +68,7 @@ export function EmotionSelectStep({ onNext, onBack }: EmotionSelectStepProps) {
 
   const handleReselectMusic = () => {
     setIsWarningOpen(false)
-    onBack()
+    onBack?.()
   }
 
   return (
@@ -99,8 +104,8 @@ export function EmotionSelectStep({ onNext, onBack }: EmotionSelectStepProps) {
           className="w-full h-[52px]"
           size="lg"
           disabled={!isNextEnabled}
-          onClick={onNext}>
-          다음
+          onClick={onComplete}>
+          {submitLabel}
         </Button>
       </div>
 

@@ -1,5 +1,5 @@
 import { CloseCircleIcon } from '@/components/icons'
-import type { Music } from '..'
+import type { Music } from '@/types/record'
 import { cn } from '@/utils/cn'
 
 interface SelectedMusicItemProps extends Music {

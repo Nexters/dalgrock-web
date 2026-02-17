@@ -2,7 +2,7 @@ import { useController, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import type { RecordFormData } from '../../index'
+import type { RecordFormData } from '@/types/record'
 import { TagSelector } from '../tag-selector'
 
 const CATEGORISED_MOMENT_TAGS = [
@@ -25,10 +25,14 @@ const CATEGORISED_MOMENT_TAGS = [
 ] as const
 
 interface MemoStepProps {
-  onNext: () => void
+  onComplete: () => void
+  submitLabel?: string
 }
 
-export function MemoStep({ onNext }: MemoStepProps) {
+export function MemoStep({
+  onComplete,
+  submitLabel = '기록 완료'
+}: MemoStepProps) {
   const { control, getValues } = useFormContext<RecordFormData>()
 
   const { field: momentField } = useController({ name: 'moment', control })
@@ -38,7 +42,7 @@ export function MemoStep({ onNext }: MemoStepProps) {
     // TODO: API 연동
     const recordData = getValues()
     console.log('기록 저장:', recordData)
-    onNext()
+    onComplete()
   }
 
   return (
@@ -75,7 +79,7 @@ export function MemoStep({ onNext }: MemoStepProps) {
           className="w-full h-[52px]"
           size="lg"
           onClick={handleSubmit}>
-          기록 완료
+          {submitLabel}
         </Button>
       </div>
     </>
