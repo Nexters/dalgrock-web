@@ -1,5 +1,5 @@
 import { AddedIcon, NotAddedIcon } from '@/components/icons'
-import type { Music } from '..'
+import type { Music } from '@/types/record'
 
 interface SearchedMusicItemProps extends Music {
   isSelected?: boolean

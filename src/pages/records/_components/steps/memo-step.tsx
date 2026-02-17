@@ -2,7 +2,7 @@ import { useController, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import type { RecordFormData } from '../../index'
+import type { RecordFormData } from '@/types/record'
 import { TagSelector } from '../tag-selector'
 
 const CATEGORISED_MOMENT_TAGS = [
@@ -25,10 +25,14 @@ const CATEGORISED_MOMENT_TAGS = [
 ] as const
 
 interface MemoStepProps {
-  onNext: () => void
+  onComplete: () => void
+  submitLabel?: string
 }
 
-export function MemoStep({ onNext }: MemoStepProps) {
+export function MemoStep({
+  onComplete,
+  submitLabel = '기록 완료'
+}: MemoStepProps) {
   const { control, getValues } = useFormContext<RecordFormData>()
 
   const { field: momentField } = useController({ name: 'moment', control })
@@ -38,7 +42,7 @@ export function MemoStep({ onNext }: MemoStepProps) {
     // TODO: API 연동
     const recordData = getValues()
     console.log('기록 저장:', recordData)
-    onNext()
+    onComplete()
   }
 
   return (
@@ -55,12 +59,17 @@ export function MemoStep({ onNext }: MemoStepProps) {
             onChange={momentField.onChange}
           />
 
-          <Textarea
-            placeholder="함께 기억하고 싶은 일이나 장소를 기록해 보세요."
-            value={memoField.value}
-            onChange={e => memoField.onChange(e.target.value)}
-            className="p-4 min-h-[52px] resize-none bg-gray-500 border-none text-sm text-gray-0 scrollbar-hide [field-sizing:content]"
-          />
+          <div className="flex flex-col gap-5">
+            <p className="text-lg text-gray-0 font-bold">
+              자유롭게 메모를 추가해 보세요
+            </p>
+            <Textarea
+              placeholder="함께 기억하고 싶은 일이나 장소를 기록해 보세요."
+              value={memoField.value}
+              onChange={e => memoField.onChange(e.target.value)}
+              className="p-4 min-h-[52px] resize-none bg-gray-500 border-none text-sm text-gray-0 scrollbar-hide [field-sizing:content]"
+            />
+          </div>
         </div>
       </section>
 
@@ -70,7 +79,7 @@ export function MemoStep({ onNext }: MemoStepProps) {
           className="w-full h-[52px]"
           size="lg"
           onClick={handleSubmit}>
-          기록 완료
+          {submitLabel}
         </Button>
       </div>
     </>

@@ -6,24 +6,10 @@ import { Header } from '@/components/header'
 import {
   MusicSearchStep,
   EmotionSelectStep,
-  MemoStep,
-  RecordCompleteStep
-} from './_components/funnels'
-
-export interface Music {
-  id: string
-  title: string
-  artist: string
-  albumArt?: string
-}
-
-export interface RecordFormData {
-  musics: Music[]
-  emotions: string[]
-  moment: string | null
-  memo: string
-  place: string
-}
+  MemoStep
+} from '../_components/steps'
+import { RecordCompleteStep } from '../_components/steps'
+import type { Music, RecordFormData } from '@/types/record'
 
 type FunnelStep = 'search' | 'emotion' | 'memo' | 'complete'
 type Direction = 'forward' | 'backward'
@@ -125,7 +111,7 @@ function RecordNew() {
                 <MusicSearchStep
                   selectedMusics={musicsField.value}
                   onMusicToggle={handleMusicToggle}
-                  onNext={handleSearchNext}
+                  onComplete={handleSearchNext}
                 />
               </motion.div>
             )}
@@ -141,7 +127,7 @@ function RecordNew() {
                 transition={SLIDE_TRANSITION}
                 className="flex flex-1 flex-col">
                 <EmotionSelectStep
-                  onNext={() => navigate('memo', 'forward')}
+                  onComplete={() => navigate('memo', 'forward')}
                   onBack={() => navigate('search', 'backward')}
                 />
               </motion.div>
@@ -157,7 +143,7 @@ function RecordNew() {
                 exit="exit"
                 transition={SLIDE_TRANSITION}
                 className="flex flex-1 flex-col">
-                <MemoStep onNext={() => navigate('complete', 'forward')} />
+                <MemoStep onComplete={() => navigate('complete', 'forward')} />
               </motion.div>
             )}
 

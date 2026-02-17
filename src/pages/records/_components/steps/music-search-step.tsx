@@ -5,7 +5,7 @@ import { SearchBar } from '@/components/search-bar'
 import { Button } from '@/components/ui/button'
 import { SearchedMusicItem } from '../searched-music-item'
 import { SelectedMusicItem } from '../selected-music-item'
-import type { Music } from '../../index'
+import type { Music } from '@/types/record'
 
 // TODO: API 연동 후 제거
 const MOCK_SEARCH_RESULTS: Music[] = [
@@ -34,13 +34,15 @@ const MOCK_SEARCH_RESULTS: Music[] = [
 interface MusicSearchStepProps {
   selectedMusics: Music[]
   onMusicToggle: (music: Music) => void
-  onNext: () => void
+  onComplete: () => void
+  submitLabel?: string
 }
 
 export function MusicSearchStep({
   selectedMusics,
   onMusicToggle,
-  onNext
+  onComplete,
+  submitLabel = '다음'
 }: MusicSearchStepProps) {
   const [keyword, setKeyword] = useState('')
 
@@ -122,8 +124,8 @@ export function MusicSearchStep({
                 variant="primary"
                 className="h-[52px] w-full"
                 size="lg"
-                onClick={onNext}>
-                다음
+                onClick={onComplete}>
+                {submitLabel}
               </Button>
             </div>
           </motion.div>
