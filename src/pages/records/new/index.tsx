@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useForm, FormProvider, useController } from 'react-hook-form'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'motion/react'
+import { toast } from 'sonner'
 
 import { Header } from '@/components/header'
 import {
@@ -9,7 +11,12 @@ import {
   MemoStep
 } from '../_components/steps'
 import { RecordCompleteStep } from '../_components/steps'
+import { getRecord } from '@/apis/generated/record/record'
+import { recordsQueries } from '@/apis/records/queries'
+import type { CreateRecordRequest } from '@/apis/generated/models'
 import type { Music, RecordFormData } from '@/types/record'
+
+const { recordv1CreateRecord } = getRecord()
 
 type FunnelStep = 'search' | 'emotion' | 'memo' | 'complete'
 type Direction = 'forward' | 'backward'
@@ -78,6 +85,39 @@ function RecordNew() {
     if (dir === 'forward') window.scrollTo(0, 0)
   }
 
+  const queryClient = useQueryClient()
+
+  const { mutate: createRecordMutate, isPending: isCreatePending } =
+    useMutation({
+      mutationFn: (request: CreateRecordRequest) =>
+        recordv1CreateRecord(request),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: recordsQueries.all })
+        navigate('complete', 'forward')
+      },
+      onError: () => {
+        toast.error('기록 저장에 실패했습니다')
+      }
+    })
+
+  const handleRecordSubmit = () => {
+    const formData = methods.getValues()
+
+    const request: CreateRecordRequest = {
+      musics: formData.musics.map(({ title, artist, albumArt }) => ({
+        title,
+        artist,
+        thumbnail: albumArt
+      })),
+      emotions: formData.emotions,
+      content: formData.memo || undefined,
+      situations: formData.moment ? [formData.moment] : undefined,
+      location: formData.place || undefined
+    }
+
+    createRecordMutate(request)
+  }
+
   const handleSearchNext = () => {
     if (musicsField.value.length > 0) navigate('emotion', 'forward')
   }
@@ -143,7 +183,10 @@ function RecordNew() {
                 exit="exit"
                 transition={SLIDE_TRANSITION}
                 className="flex flex-1 flex-col">
-                <MemoStep onComplete={() => navigate('complete', 'forward')} />
+                <MemoStep
+                  onComplete={handleRecordSubmit}
+                  isPending={isCreatePending}
+                />
               </motion.div>
             )}
 

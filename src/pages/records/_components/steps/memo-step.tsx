@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import type { RecordFormData } from '@/types/record'
 import { TagSelector } from '../tag-selector'
+import { LoaderCircle } from 'lucide-react'
 
 const CATEGORISED_MOMENT_TAGS = [
   { id: 'commute', label: '출퇴근길' },
@@ -26,24 +27,19 @@ const CATEGORISED_MOMENT_TAGS = [
 
 interface MemoStepProps {
   onComplete: () => void
+  isPending?: boolean
   submitLabel?: string
 }
 
 export function MemoStep({
   onComplete,
+  isPending = false,
   submitLabel = '기록 완료'
 }: MemoStepProps) {
-  const { control, getValues } = useFormContext<RecordFormData>()
+  const { control } = useFormContext<RecordFormData>()
 
   const { field: momentField } = useController({ name: 'moment', control })
   const { field: memoField } = useController({ name: 'memo', control })
-
-  const handleSubmit = () => {
-    // TODO: API 연동
-    const recordData = getValues()
-    console.log('기록 저장:', recordData)
-    onComplete()
-  }
 
   return (
     <>
@@ -78,8 +74,13 @@ export function MemoStep({
           variant="primary"
           className="w-full h-[52px]"
           size="lg"
-          onClick={handleSubmit}>
-          {submitLabel}
+          disabled={isPending}
+          onClick={onComplete}>
+          {isPending ? (
+            <LoaderCircle className="size-5 animate-spin" />
+          ) : (
+            submitLabel
+          )}
         </Button>
       </div>
     </>
