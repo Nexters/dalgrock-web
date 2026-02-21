@@ -9,7 +9,10 @@ import type {
   CreateRecordRequest,
   CreateRecordResponse,
   GetRecordDetailResponse,
-  GetRecordResponse
+  GetRecordResponse,
+  GetWeeklyResponse,
+  Recordv1GetMonthlyRecordsParams,
+  UpdateRecordRequest
 } from '.././models'
 
 import { api } from '../../instance'
@@ -31,6 +34,52 @@ export const getRecord = () => {
     })
   }
   /**
+   * 기록을 소프트 삭제합니다
+   * @summary 내 기록 삭제
+   */
+  const recordv1DeleteRecord = (recordId: number) => {
+    return api<void>({ url: `/v1/records/${recordId}`, method: 'DELETE' })
+  }
+  /**
+ * type에 해당하는 필드만 수정합니다. 한 번에 하나의 필드만 수정 가능합니다.
+
+**type별 data 스키마:**
+| type | data 스키마 | 예시 |
+|------|-------------|------|
+| content | string | `"오늘의 기록 내용"` |
+| emotions | string[] | `["행복", "설렘"]` |
+| situations | string[] | `["출퇴근", "카페"]` |
+| musics | object[] | `[{ "title": "곡명", "artist": "아티스트", "thumbnail": "https://..." }]` |
+
+musics 수정 시: Music 테이블에 없으면 추가하고, record 썸네일은 첫 곡 썸네일로 갱신됩니다.
+
+ * @summary 내 기록 수정
+ */
+  const recordv1UpdateRecord = (
+    recordId: number,
+    updateRecordRequest: UpdateRecordRequest
+  ) => {
+    return api<GetRecordDetailResponse>({
+      url: `/v1/records/${recordId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateRecordRequest
+    })
+  }
+  /**
+   * year, month 기준 해당 달의 월별 레코드를 조회합니다
+   * @summary 월별 기록 조회 (기록 전체보기)
+   */
+  const recordv1GetMonthlyRecords = (
+    params: Recordv1GetMonthlyRecordsParams
+  ) => {
+    return api<GetWeeklyResponse>({
+      url: `/v1/records/monthly`,
+      method: 'GET',
+      params
+    })
+  }
+  /**
    * 내 기록 ID로 기록을 상세 조회합니다
    * @summary 내 기록 상세 조회
    */
@@ -40,13 +89,29 @@ export const getRecord = () => {
       method: 'GET'
     })
   }
-  return { recordv1GetRecords, recordv1CreateRecord, recordv1GetRecordDetail }
+  return {
+    recordv1GetRecords,
+    recordv1CreateRecord,
+    recordv1DeleteRecord,
+    recordv1UpdateRecord,
+    recordv1GetMonthlyRecords,
+    recordv1GetRecordDetail
+  }
 }
 export type Recordv1GetRecordsResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getRecord>['recordv1GetRecords']>>
 >
 export type Recordv1CreateRecordResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getRecord>['recordv1CreateRecord']>>
+>
+export type Recordv1DeleteRecordResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getRecord>['recordv1DeleteRecord']>>
+>
+export type Recordv1UpdateRecordResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getRecord>['recordv1UpdateRecord']>>
+>
+export type Recordv1GetMonthlyRecordsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getRecord>['recordv1GetMonthlyRecords']>>
 >
 export type Recordv1GetRecordDetailResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getRecord>['recordv1GetRecordDetail']>>

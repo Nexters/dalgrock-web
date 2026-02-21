@@ -10,7 +10,6 @@ import type { MusicThumbnailItem } from './musicThumbnailItem'
 export interface RecordItem {
   recordId?: number
   createdAt?: string
-  thumbnail?: string
   musics?: MusicThumbnailItem[]
   emotions?: string[]
   isToday?: boolean
