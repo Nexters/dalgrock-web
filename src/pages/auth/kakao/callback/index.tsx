@@ -1,20 +1,24 @@
 import { useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { setAccessToken, setAuthenticated } from '@/utils/auth'
 
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`))
+  return match ? decodeURIComponent(match[1]) : null
+}
+
 function KakaoCallback() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
 
   useEffect(() => {
-    const token = searchParams.get('token')
+    const token = getCookie('access_token')
     if (token) {
       setAccessToken(token)
     }
     setAuthenticated()
     navigate('/', { replace: true })
-  }, [navigate, searchParams])
+  }, [navigate])
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-gray-600">
