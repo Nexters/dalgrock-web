@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios'
 
-import { clearAuth } from '@/utils/auth'
+import { clearAuth, getAccessToken } from '@/utils/auth'
 
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'https://api-dev.pliview.kr'
@@ -11,6 +11,14 @@ export const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json'
   }
+})
+
+axiosInstance.interceptors.request.use(config => {
+  const token = getAccessToken()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 axiosInstance.interceptors.response.use(

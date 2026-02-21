@@ -1,15 +1,20 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { setAuthenticated } from '@/utils/auth'
+import { setAccessToken, setAuthenticated } from '@/utils/auth'
 
 function KakaoCallback() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   useEffect(() => {
+    const token = searchParams.get('token')
+    if (token) {
+      setAccessToken(token)
+    }
     setAuthenticated()
     navigate('/', { replace: true })
-  }, [navigate])
+  }, [navigate, searchParams])
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-gray-600">
