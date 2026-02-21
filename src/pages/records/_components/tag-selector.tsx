@@ -1,11 +1,6 @@
 import { cn } from '@/utils/cn'
 
-interface Tag {
-  readonly id: string
-  readonly label: string
-}
-
-type CategorizedTags = readonly Record<string, readonly Tag[]>[]
+type CategorizedTags = readonly Record<string, readonly string[]>[]
 
 type SingleSelectProps = {
   multiple?: false
@@ -20,11 +15,11 @@ type MultiSelectProps = {
 }
 
 type TagSelectorProps = {
-  tags: readonly Tag[] | CategorizedTags
+  tags: readonly string[] | CategorizedTags
 } & (SingleSelectProps | MultiSelectProps)
 
 function isCategorizedTags(
-  tags: readonly Tag[] | CategorizedTags
+  tags: readonly string[] | CategorizedTags
 ): tags is CategorizedTags {
   if (tags.length === 0) return false
   const firstItem = tags[0]
@@ -36,7 +31,7 @@ function TagButton({
   isSelected,
   onClick
 }: {
-  tag: Tag
+  tag: string
   isSelected: boolean
   onClick: () => void
 }) {
@@ -50,7 +45,7 @@ function TagButton({
           ? 'bg-gradient-to-b from-[#73F0DE] to-[#F4DD4B] text-gray-600 font-semibold'
           : 'bg-gray-500 text-gray-0 hover:bg-[#2f3340]'
       )}>
-      {tag.label}
+      {tag}
     </button>
   )
 }
@@ -98,10 +93,10 @@ export function TagSelector(props: TagSelectorProps) {
               <div className="flex flex-wrap gap-2">
                 {categoryTags.map(tag => (
                   <TagButton
-                    key={tag.id}
+                    key={`${title}-${tag}`}
                     tag={tag}
-                    isSelected={isSelected(tag.id)}
-                    onClick={() => handleTagClick(tag.id)}
+                    isSelected={isSelected(tag)}
+                    onClick={() => handleTagClick(tag)}
                   />
                 ))}
               </div>
@@ -116,10 +111,10 @@ export function TagSelector(props: TagSelectorProps) {
     <div className="flex flex-wrap gap-2">
       {tags.map(tag => (
         <TagButton
-          key={tag.id}
+          key={tag}
           tag={tag}
-          isSelected={isSelected(tag.id)}
-          onClick={() => handleTagClick(tag.id)}
+          isSelected={isSelected(tag)}
+          onClick={() => handleTagClick(tag)}
         />
       ))}
     </div>

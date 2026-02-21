@@ -6,23 +6,23 @@ import type { RecordFormData } from '@/types/record'
 import { TagSelector } from '../tag-selector'
 import { LoaderCircle } from 'lucide-react'
 
-const CATEGORISED_MOMENT_TAGS = [
-  { id: 'commute', label: '출퇴근길' },
-  { id: 'drive', label: '운전 중' },
-  { id: 'workout', label: '운동' },
-  { id: 'walk', label: '산책' },
-  { id: 'reading', label: '독서' },
-  { id: 'running', label: '러닝' },
-  { id: 'study', label: '공부' },
-  { id: 'work', label: '작업' },
-  { id: 'job', label: '업무' },
-  { id: 'housework', label: '집안일' },
-  { id: 'shower', label: '샤워' },
-  { id: 'rest', label: '휴식' },
-  { id: 'date', label: '데이트' },
-  { id: 'night', label: '자기 전' },
-  { id: 'nap', label: '낮잠' },
-  { id: 'morning', label: '아침' }
+const MOMENT_TAGS = [
+  '출퇴근길',
+  '운전 중',
+  '운동',
+  '산책',
+  '독서',
+  '러닝',
+  '공부',
+  '작업',
+  '업무',
+  '집안일',
+  '샤워',
+  '휴식',
+  '데이트',
+  '자기 전',
+  '낮잠',
+  '아침'
 ] as const
 
 interface MemoStepProps {
@@ -50,7 +50,7 @@ export function MemoStep({
 
         <div className="flex flex-col gap-12">
           <TagSelector
-            tags={CATEGORISED_MOMENT_TAGS}
+            tags={MOMENT_TAGS}
             selectedId={momentField.value}
             onChange={momentField.onChange}
           />

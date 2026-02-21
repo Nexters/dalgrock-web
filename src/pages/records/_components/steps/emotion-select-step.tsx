@@ -17,24 +17,18 @@ import { TagSelector } from '../tag-selector'
 
 const CATEGORISED_EMOTION_TAGS = [
   {
-    긍정: [
-      { id: 'proud', label: '뿌듯함' },
-      { id: 'moved', label: '감동' },
-      { id: 'happy', label: '기쁨' },
-      { id: 'calm', label: '평온함' },
-      { id: 'excited', label: '설렘' },
-      { id: 'joyful', label: '행복' },
-      { id: 'exciting', label: '신남' }
-    ]
+    '🟡 들뜬': ['행복', '설렘', '신남', '뿌듯함', '감동']
   },
   {
-    부정: [
-      { id: 'sad', label: '슬픔' },
-      { id: 'melancholy', label: '우울함' },
-      { id: 'nostalgic', label: '그리움' }
-    ]
+    '🔵 가라앉은': ['우울', '그리움', '외로움', '권태', '허무', '피곤', '후회']
   },
-  { '그 외': [{ id: 'ambivalent', label: '복잡미묘' }] }
+  {
+    '🔴 날카로운': ['분노', '불안', '긴장', '질투']
+  },
+  {
+    '🟢 복합적인': ['사랑', '복잡미묘']
+  },
+  { '🟣 따뜻한': ['감사'] }
 ] as const
 
 interface EmotionSelectStepProps {
