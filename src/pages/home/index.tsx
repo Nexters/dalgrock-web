@@ -1,17 +1,14 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import type { RecordItem } from '@/apis/generated/models'
 import { recordsQueries } from '@/apis/records/queries'
 
+import { DaySelector } from './_components/day-selector'
 import { HeroSection } from './_components/hero-section'
 import { HomeTabs } from './_components/home-tabs'
-import { TodayRecord } from './_components/today-record'
-import {
-  WeeklyRecordSection,
-  type WeeklyRecordItem
-} from './_components/weekly-record-grid'
-
-const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일']
+import { RecordCarousel } from './_components/record-carousel'
+import { ReportCTA } from './_components/report-cta'
 
 function getMonday(): Date {
   const now = new Date()
@@ -22,37 +19,28 @@ function getMonday(): Date {
   return monday
 }
 
-function formatTodayDate(): string {
-  const now = new Date()
-  return `${now.getMonth() + 1}월 ${now.getDate()}일`
+function getTodayDayIndex(): number {
+  const day = new Date().getDay()
+  return day === 0 ? 6 : day - 1
 }
 
-function getWeekLabel(): string {
-  const monday = getMonday()
-  const month = monday.getMonth() + 1
-  const weekOfMonth = Math.ceil(monday.getDate() / 7)
-  return `${month}월 ${weekOfMonth}주차`
+function getDaysUntilSunday(): number {
+  const day = new Date().getDay()
+  return day === 0 ? 0 : 7 - day
 }
 
-function toWeeklyRecordItems(records: RecordItem[]): WeeklyRecordItem[] {
+function getDateLabels(records: RecordItem[]): string[] {
   const monday = getMonday()
-
-  return records.map((record, index) => {
+  return records.map((_, index) => {
     const date = new Date(monday)
     date.setDate(monday.getDate() + index)
-    const dateStr = date.toISOString().split('T')[0]
-
-    return {
-      date: dateStr,
-      dayLabel: DAY_LABELS[index],
-      dateLabel: `${date.getMonth() + 1}/${date.getDate()}`,
-      hasRecord: !!record.recordId,
-      albumImage: record.musics?.[0]?.thumbnail
-    }
+    return `${date.getMonth() + 1}월 ${date.getDate()}일`
   })
 }
 
 function Home() {
+  const [selectedDay, setSelectedDay] = useState(getTodayDayIndex())
+
   const {
     data: weeklySlotData,
     isLoading,
@@ -60,8 +48,10 @@ function Home() {
   } = useQuery(recordsQueries.getWeeklySlotRecords())
 
   const records = weeklySlotData?.records ?? []
-  const todayRecord = records.find(r => r.isToday)
-  const hasRecord = !!todayRecord?.recordId
+  const hasRecordByDay = records.map(r => !!r.recordId)
+  const dateLabels = getDateLabels(records)
+  const daysUntilReport = getDaysUntilSunday()
+  const isReportReady = daysUntilReport === 0
 
   if (isLoading) {
     return (
@@ -86,18 +76,24 @@ function Home() {
     <div className="relative min-h-dvh bg-gray-600">
       <HomeTabs />
 
-      <HeroSection hasRecord={hasRecord} />
+      <HeroSection />
 
-      <TodayRecord
-        date={formatTodayDate()}
-        hasRecord={hasRecord}
-        albumImage={todayRecord?.musics?.[0]?.thumbnail}
-        emotions={todayRecord?.emotions}
+      <DaySelector
+        selectedIndex={selectedDay}
+        hasRecordByDay={hasRecordByDay}
+        onSelect={setSelectedDay}
       />
 
-      <WeeklyRecordSection
-        weekLabel={getWeekLabel()}
-        records={toWeeklyRecordItems(records)}
+      <RecordCarousel
+        records={records}
+        selectedIndex={selectedDay}
+        onIndexChange={setSelectedDay}
+        dateLabels={dateLabels}
+      />
+
+      <ReportCTA
+        isReportReady={isReportReady}
+        daysUntilReport={daysUntilReport}
       />
     </div>
   )
