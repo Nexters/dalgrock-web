@@ -56,7 +56,6 @@ function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
       className="mt-auto px-5 pb-6 pt-12"
       style={wrapperStyle}>
       <div className="flex flex-col gap-3">
-        {/* 라벨 중앙정렬 */}
         <div className="flex items-center justify-center gap-1">
           <span className="text-sm leading-[20px] tracking-[-0.25px] text-white">
             이번 주 분석 리포트까지
@@ -68,31 +67,29 @@ function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
           </span>
         </div>
 
-        {/* 프로그레스 바 (높이 13px - 글로우 도트 포함) */}
         <div className="relative h-[13px] w-full">
-          {/* 트랙 배경 */}
           <div className="absolute inset-x-0 top-[3px] h-[7px] rounded-full bg-[#16171c]" />
-          {/* 채워진 부분 */}
           <div
             className="absolute left-0 top-[3px] h-[7px] rounded-full"
             style={{
               width: `${progress}%`,
-              background: 'linear-gradient(to right, #73f0de, #f4dd4b)'
+              background:
+                'linear-gradient(to bottom, #73f0de 50%, #f4dd4b 100%)'
             }}
           />
-          {/* 글로우 - 외부 원 (13×13, 피그마 Ellipse 166) */}
+
           <div
             className="absolute top-0 h-[13px] w-[13px] -translate-x-1/2 rounded-full opacity-40"
             style={{
-              left: `${progress}%`,
+              left: `calc(${progress}% - 2px)`,
               backgroundColor: '#9bebb1'
             }}
           />
-          {/* 글로우 - 내부 원 (6.7×6.7, 피그마 Ellipse 165) */}
+
           <div
             className="absolute top-[3.15px] h-[6.7px] w-[6.7px] -translate-x-1/2 rounded-full"
             style={{
-              left: `${progress}%`,
+              left: `calc(${progress}% - 2px)`,
               backgroundColor: '#9bebb1',
               boxShadow: '0 0 6px 2px rgba(155,235,177,0.5)'
             }}
