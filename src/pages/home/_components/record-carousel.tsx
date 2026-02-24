@@ -77,10 +77,9 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
     .filter((t): t is string => !!t)
     .slice(0, 3)
   const emotions = record.emotions ?? []
+
   const displayedEmotions = emotions.slice(0, 2)
   const remainingCount = emotions.length - 2
-
-  const lastThumbnail = thumbnails[thumbnails.length - 1]
 
   return (
     <div className="flex flex-col items-center">
@@ -107,10 +106,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
             </div>
           </Link>
         )}
-        <AlbumCase
-          thumbnailUrl={lastThumbnail}
-          className="absolute z-10 bottom-0 left-1/2 -translate-x-1/2"
-        />
+        <AlbumCase className="absolute z-10 bottom-0 left-1/2 -translate-x-1/2" />
       </div>
 
       <span className="mt-2 text-sm leading-[21px] text-white">
