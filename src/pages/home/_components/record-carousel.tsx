@@ -1,5 +1,6 @@
+import useEmblaCarousel from 'embla-carousel-react'
 import { Plus } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import type { RecordItem } from '@/apis/generated/models'
@@ -13,69 +14,45 @@ interface RecordCarouselProps {
   dateLabels: string[]
 }
 
-const ITEM_WIDTH = 203
-const ITEM_GAP = 0
-
 function RecordCarousel({
   records,
   selectedIndex,
   onIndexChange,
   dateLabels
 }: RecordCarouselProps) {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const isScrollingRef = useRef(false)
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: 'center',
+    containScroll: false,
+    startIndex: selectedIndex
+  })
 
   useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
+    if (!emblaApi) return
+    emblaApi.scrollTo(selectedIndex)
+  }, [emblaApi, selectedIndex])
 
-    const containerWidth = el.clientWidth
-    const scrollTarget =
-      selectedIndex * (ITEM_WIDTH + ITEM_GAP) -
-      (containerWidth - ITEM_WIDTH) / 2
+  useEffect(() => {
+    if (!emblaApi) return
 
-    isScrollingRef.current = true
-    el.scrollTo({ left: scrollTarget, behavior: 'smooth' })
-
-    const timeout = setTimeout(() => {
-      isScrollingRef.current = false
-    }, 400)
-
-    return () => clearTimeout(timeout)
-  }, [selectedIndex])
-
-  function handleScroll() {
-    const el = scrollRef.current
-    if (!el || isScrollingRef.current) return
-
-    const containerWidth = el.clientWidth
-    const scrollLeft = el.scrollLeft
-    const centerOffset = scrollLeft + containerWidth / 2
-
-    const newIndex = Math.round(centerOffset / (ITEM_WIDTH + ITEM_GAP))
-    const clampedIndex = Math.max(0, Math.min(records.length - 1, newIndex))
-
-    if (clampedIndex !== selectedIndex) {
-      onIndexChange(clampedIndex)
+    const onSelect = () => {
+      onIndexChange(emblaApi.selectedScrollSnap())
     }
-  }
 
-  const paddingX = `calc((100% - ${ITEM_WIDTH}px) / 2)`
+    emblaApi.on('select', onSelect)
+    return () => {
+      emblaApi.off('select', onSelect)
+    }
+  }, [emblaApi, onIndexChange])
 
   return (
     <div
-      ref={scrollRef}
-      className="flex snap-x snap-mandatory overflow-x-auto scrollbar-hide"
-      style={{ scrollSnapType: 'x mandatory' }}
-      onScroll={handleScroll}>
-      <div
-        className="flex shrink-0"
-        style={{ paddingLeft: paddingX, paddingRight: paddingX }}>
+      className="overflow-hidden"
+      ref={emblaRef}>
+      <div className="flex touch-pan-y">
         {records.map((record, index) => (
           <div
             key={index}
-            className="w-[203px] shrink-0 snap-center"
-            style={{ scrollSnapAlign: 'center' }}>
+            className="min-w-0 flex-[0_0_203px]">
             <RecordItem
               record={record}
               dateLabel={dateLabels[index] ?? ''}
