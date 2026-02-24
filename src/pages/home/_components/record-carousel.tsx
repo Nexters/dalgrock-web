@@ -94,7 +94,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
         ) : (
           <Link
             to="/records/new"
-            className="z-10 mb-[80px] flex flex-col items-center">
+            className="z-10 mb-[40px] flex flex-col items-center">
             <div
               className="flex h-[148px] w-[148px] flex-col items-center justify-center rounded-full bg-[#262930]"
               style={{
@@ -133,7 +133,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
           )}
         </div>
       ) : (
-        <span className="mt-2 text-sm leading-[21px] text-white">
+        <span className="mt-2 text-sm leading-[21px] text-white/50">
           아직 감정이 기록되지 않았어요
         </span>
       )}
