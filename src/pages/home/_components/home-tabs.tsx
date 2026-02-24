@@ -40,10 +40,8 @@ function HomeTabs() {
           </div>
         }
         rightChild={
-          <Link
-            to="/settings"
-            className="p-2">
-            <Settings className="h-6 w-6 text-[#6B7181]" />
+          <Link to="/settings">
+            <Settings className="h-6 w-6 text-gray-200" />
           </Link>
         }
       />

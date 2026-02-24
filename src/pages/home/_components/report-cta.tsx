@@ -5,12 +5,23 @@ interface ReportCTAProps {
   daysUntilReport: number
 }
 
-function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
-  const wrapperStyle = {
-    background:
-      'linear-gradient(180deg, transparent 0%, rgba(114,235,217,0.06) 100%), linear-gradient(180deg, transparent 0%, #16171c 40%)'
-  }
+// fill1 (yellow, visible:false) → 비활성 레이어, 제외
+// fill2 (opacity 0.7): transparent → #72ebd9 (stop opacity 0.6) at 56.7%
+//   gradient handle가 요소 높이의 175%까지 뻗어 있어
+//   stop 0.567 × 1.75 ≈ 100% 위치에 도달 → CSS에서 100%로 표현
+//   최종 opacity: 0.7 × 0.6 = 0.42
+const wrapperStyle = {
+  background:
+    'linear-gradient(180deg, rgba(114,235,217,0) 0%, rgba(114,235,217,0.42) 100%)'
+}
 
+const gradientText = {
+  background: 'linear-gradient(to bottom, #73f0de, #f4dd4b)',
+  WebkitBackgroundClip: 'text' as const,
+  WebkitTextFillColor: 'transparent' as const
+}
+
+function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
   if (isReportReady) {
     return (
       <div
@@ -21,11 +32,7 @@ function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
             <span className="font-bold">이번 주 분석 리포트</span>{' '}
             <span
               className="font-bold"
-              style={{
-                background: 'linear-gradient(to bottom, #73f0de, #f4dd4b)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
+              style={gradientText}>
               도착!
             </span>
           </p>
@@ -42,31 +49,52 @@ function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
     )
   }
 
+  const progress = ((7 - daysUntilReport) / 7) * 100
+
   return (
     <div
       className="mt-auto px-5 pb-6 pt-12"
       style={wrapperStyle}>
       <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-1">
+        {/* 라벨 중앙정렬 */}
+        <div className="flex items-center justify-center gap-1">
           <span className="text-sm leading-[20px] tracking-[-0.25px] text-white">
             이번 주 분석 리포트까지
           </span>
           <span
             className="text-sm font-bold leading-[21px] tracking-[-0.4px]"
-            style={{
-              background: 'linear-gradient(to bottom, #73f0de, #f4dd4b)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
+            style={gradientText}>
             D-{daysUntilReport}
           </span>
         </div>
-        <div className="relative h-[7px] w-full overflow-hidden rounded-full bg-[#16171c]">
+
+        {/* 프로그레스 바 (높이 13px - 글로우 도트 포함) */}
+        <div className="relative h-[13px] w-full">
+          {/* 트랙 배경 */}
+          <div className="absolute inset-x-0 top-[3px] h-[7px] rounded-full bg-[#16171c]" />
+          {/* 채워진 부분 */}
           <div
-            className="absolute left-0 top-0 h-full rounded-full"
+            className="absolute left-0 top-[3px] h-[7px] rounded-full"
             style={{
-              width: `${((7 - daysUntilReport) / 7) * 100}%`,
+              width: `${progress}%`,
               background: 'linear-gradient(to right, #73f0de, #f4dd4b)'
+            }}
+          />
+          {/* 글로우 - 외부 원 (13×13, 피그마 Ellipse 166) */}
+          <div
+            className="absolute top-0 h-[13px] w-[13px] -translate-x-1/2 rounded-full opacity-40"
+            style={{
+              left: `${progress}%`,
+              backgroundColor: '#9bebb1'
+            }}
+          />
+          {/* 글로우 - 내부 원 (6.7×6.7, 피그마 Ellipse 165) */}
+          <div
+            className="absolute top-[3.15px] h-[6.7px] w-[6.7px] -translate-x-1/2 rounded-full"
+            style={{
+              left: `${progress}%`,
+              backgroundColor: '#9bebb1',
+              boxShadow: '0 0 6px 2px rgba(155,235,177,0.5)'
             }}
           />
         </div>
