@@ -5,10 +5,8 @@
  * Pliview API 문서
  * OpenAPI spec version: 1.0.0
  */
-import type {
-  GetWeeklyResponse,
-  Weeklyv1GetWeeklyRecordsParams
-} from '.././models'
+import type { GetWeeklyResponse } from '.././models'
+import type { Weeklyv1GetWeeklyRecordsParams } from '.././models/weeklyv1GetWeeklyRecordsParams'
 
 import { api } from '../../instance'
 

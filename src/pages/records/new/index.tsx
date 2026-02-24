@@ -104,10 +104,11 @@ function RecordNew() {
     const formData = methods.getValues()
 
     const request: CreateRecordRequest = {
-      musics: formData.musics.map(({ title, artist, albumArt }) => ({
+      musics: formData.musics.map(({ title, artist, albumArt, genre }) => ({
         title,
         artist,
-        thumbnail: albumArt
+        thumbnail: albumArt,
+        genre
       })),
       emotions: formData.emotions,
       content: formData.memo || undefined,
