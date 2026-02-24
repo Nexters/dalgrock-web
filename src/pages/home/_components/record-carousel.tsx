@@ -93,7 +93,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
         ) : (
           <Link
             to="/records/new"
-            className="z-10 mb-[-170px] flex flex-col items-center">
+            className="z-10 mb-[40px] flex flex-col items-center">
             <div
               className="flex h-[148px] w-[148px] flex-col items-center justify-center rounded-full bg-[#262930]"
               style={{
