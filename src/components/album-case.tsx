@@ -22,7 +22,7 @@ interface AlbumCaseProps {
 
 function AlbumCase({ thumbnailUrl, className }: AlbumCaseProps) {
   return (
-    <div className={cn('relative h-20 w-40 overflow-hidden', className)}>
+    <div className={cn('relative h-20 w-40 overflow-hidden z-10', className)}>
       <div
         className="absolute inset-0 overflow-hidden rounded-lg"
         style={{
