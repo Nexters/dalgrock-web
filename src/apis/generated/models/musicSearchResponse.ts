@@ -12,4 +12,5 @@ export interface MusicSearchResponse {
   artist?: string
   thumbnail?: string
   spotifyUrl?: string
+  genre?: string
 }

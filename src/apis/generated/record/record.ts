@@ -49,7 +49,7 @@ export const getRecord = () => {
 | content | string | `"오늘의 기록 내용"` |
 | emotions | string[] | `["행복", "설렘"]` |
 | situations | string[] | `["출퇴근", "카페"]` |
-| musics | object[] | `[{ "title": "곡명", "artist": "아티스트", "thumbnail": "https://..." }]` |
+| musics | object[] | `[{ "title": "곡명", "artist": "아티스트", "thumbnail": "https://...", "genre": "팝" }]` |
 
 musics 수정 시: Music 테이블에 없으면 추가하고, record 썸네일은 첫 곡 썸네일로 갱신됩니다.
 
