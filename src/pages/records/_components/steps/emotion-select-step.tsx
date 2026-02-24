@@ -106,7 +106,7 @@ export function EmotionSelectStep({
       <ConfirmDialog
         open={isWarningOpen}
         onOpenChange={setIsWarningOpen}>
-        <ConfirmDialogContent>
+        <ConfirmDialogContent className="max-w-[320px]">
           <ConfirmDialogTitle>
             음악은 1개 이상 선택이 필요해요
           </ConfirmDialogTitle>
