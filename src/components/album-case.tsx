@@ -16,34 +16,34 @@ const STROKE_MASK_STYLE: React.CSSProperties = {
 }
 
 interface AlbumCaseProps {
-  thumbnailUrl?: string
   className?: string
 }
 
-function AlbumCase({ thumbnailUrl, className }: AlbumCaseProps) {
+const NOTCH_MASK =
+  'radial-gradient(circle 25px at 50% 0, transparent 24px, black 25px)'
+
+function AlbumCase({ className }: AlbumCaseProps) {
   return (
-    <div className={cn('relative h-20 w-40 overflow-hidden z-10', className)}>
+    <div
+      className={cn(
+        'relative h-20 w-40 overflow-hidden z-10 backdrop-blur-[3px]',
+        className
+      )}
+      style={{
+        maskImage: NOTCH_MASK,
+        WebkitMaskImage: NOTCH_MASK
+      }}>
       <div
         className="absolute inset-0 overflow-hidden rounded-lg"
         style={{
-          maskImage:
-            'radial-gradient(circle 25px at 50% 0, transparent 24px, black 25px)',
-          WebkitMaskImage:
-            'radial-gradient(circle 25px at 50% 0, transparent 24px, black 25px)'
+          maskImage: NOTCH_MASK,
+          WebkitMaskImage: NOTCH_MASK
         }}>
-        {thumbnailUrl && (
-          <img
-            src={thumbnailUrl}
-            alt=""
-            className="absolute inset-0 h-full w-full scale-150 object-cover blur-2xl"
-          />
-        )}
         <div
-          className="absolute inset-0 backdrop-blur-[20px]"
+          className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)',
-            opacity: 0.3
+              'linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)'
           }}
         />
 
