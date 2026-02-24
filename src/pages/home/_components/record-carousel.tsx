@@ -109,7 +109,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
         )}
         <AlbumCase
           thumbnailUrl={lastThumbnail}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2"
+          className="absolute z-10 bottom-0 left-1/2 -translate-x-1/2"
         />
       </div>
 
