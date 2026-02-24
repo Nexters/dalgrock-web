@@ -38,8 +38,14 @@ function AlbumCase({ thumbnailUrl, className }: AlbumCaseProps) {
       <div
         className="pointer-events-none absolute inset-0 rounded-[inherit]"
         style={{
-          boxShadow:
-            'inset 0 0 0 1px rgba(255,255,255,0.12), inset 0 1px 3px rgba(255,255,255,0.06)'
+          padding: '1px',
+          background:
+            'linear-gradient(90deg, rgba(137,237,196,0.3) 0%, rgba(137,237,196,0.02) 30%, rgba(137,237,196,0.1) 50%, rgba(137,237,196,0.3) 100%)',
+          WebkitMask:
+            'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'destination-out',
+          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+          maskComposite: 'exclude'
         }}
       />
       <div

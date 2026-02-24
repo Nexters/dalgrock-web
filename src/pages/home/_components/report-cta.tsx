@@ -6,9 +6,16 @@ interface ReportCTAProps {
 }
 
 function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
+  const wrapperStyle = {
+    background:
+      'linear-gradient(180deg, transparent 0%, rgba(114,235,217,0.06) 100%), linear-gradient(180deg, transparent 0%, #16171c 40%)'
+  }
+
   if (isReportReady) {
     return (
-      <div className="px-5 pb-6 pt-4">
+      <div
+        className="mt-auto px-5 pb-6 pt-12"
+        style={wrapperStyle}>
         <div className="flex flex-col items-center gap-3">
           <p className="text-sm leading-[20px] tracking-[-0.25px] text-white">
             <span className="font-bold">이번 주 분석 리포트</span>{' '}
@@ -36,7 +43,9 @@ function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
   }
 
   return (
-    <div className="px-5 pb-6 pt-4">
+    <div
+      className="mt-auto px-5 pb-6 pt-12"
+      style={wrapperStyle}>
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-1">
           <span className="text-sm leading-[20px] tracking-[-0.25px] text-white">

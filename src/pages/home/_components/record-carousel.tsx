@@ -84,7 +84,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative flex h-[280px] w-[180px] items-center justify-center">
+      <div className="relative flex h-[320px] w-[180px] items-center justify-center">
         {hasRecord && thumbnails.length > 0 ? (
           <Link
             to={`/records/${record.createdAt?.split('T')[0]}`}
@@ -94,7 +94,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
         ) : (
           <Link
             to="/records/new"
-            className="z-10 flex flex-col items-center">
+            className="z-10 mb-[80px] flex flex-col items-center">
             <div
               className="flex h-[148px] w-[148px] flex-col items-center justify-center rounded-full bg-[#262930]"
               style={{
