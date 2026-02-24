@@ -7,22 +7,21 @@ import { TagSelector } from '../tag-selector'
 import { LoaderCircle } from 'lucide-react'
 
 const MOMENT_TAGS = [
-  '출퇴근길',
-  '운전 중',
-  '운동',
+  '출근길',
+  '퇴근길',
+  '드라이브',
   '산책',
+  '운동',
   '독서',
-  '러닝',
   '공부',
-  '작업',
-  '업무',
+  '작업 중',
+  '업무 중',
   '집안일',
-  '샤워',
-  '휴식',
+  '샤워 중',
   '데이트',
-  '자기 전',
+  '잠들기 전',
   '낮잠',
-  '아침'
+  '기상했을 때'
 ] as const
 
 interface MemoStepProps {

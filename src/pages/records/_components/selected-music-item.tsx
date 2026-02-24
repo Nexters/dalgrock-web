@@ -11,6 +11,7 @@ interface SelectedMusicItemProps extends Music {
 export function SelectedMusicItem({
   title,
   artist,
+  albumArt,
   transparent = false,
   border = false,
   onRemove
@@ -22,7 +23,15 @@ export function SelectedMusicItem({
         border ? 'rounded-[7px]' : 'rounded-lg',
         transparent ? 'bg-transparent' : 'bg-gray-600'
       )}>
-      <div className="size-7 shrink-0 rounded-md bg-gray-200" />
+      {albumArt ? (
+        <img
+          src={albumArt}
+          alt={title}
+          className="size-7 shrink-0 rounded-md object-cover"
+        />
+      ) : (
+        <div className="size-7 shrink-0 rounded-md bg-gray-200" />
+      )}
 
       <div className="min-w-0 flex-1 flex flex-col text-left">
         <p className="truncate text-white text-[12px]">{title}</p>

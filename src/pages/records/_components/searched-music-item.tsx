@@ -9,6 +9,7 @@ interface SearchedMusicItemProps extends Music {
 export function SearchedMusicItem({
   title,
   artist,
+  albumArt,
   isSelected = false,
   onClick
 }: SearchedMusicItemProps) {
@@ -17,8 +18,15 @@ export function SearchedMusicItem({
       type="button"
       onClick={onClick}
       className="flex w-full items-center gap-3 rounded-lg py-3 px-5 text-left transition-colors">
-      {/* NOTE: 앨범 아트 플레이스홀더 */}
-      <div className="size-[46px] shrink-0 rounded-md bg-gray-200" />
+      {albumArt ? (
+        <img
+          src={albumArt}
+          alt={title}
+          className="size-[46px] shrink-0 rounded-md object-cover"
+        />
+      ) : (
+        <div className="size-[46px] shrink-0 rounded-md bg-gray-200" />
+      )}
 
       <div className="min-w-0 flex-1 flex flex-col text-left">
         <p className="truncate font-medium text-white text-[15px]">{title}</p>
