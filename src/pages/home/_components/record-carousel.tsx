@@ -23,7 +23,8 @@ function RecordCarousel({
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'center',
     containScroll: false,
-    startIndex: selectedIndex
+    startIndex: selectedIndex,
+    duration: 50
   })
 
   useEffect(() => {
