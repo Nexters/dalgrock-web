@@ -48,14 +48,13 @@ function Home() {
   } = useQuery(recordsQueries.getWeeklySlotRecords())
 
   const records = weeklySlotData?.records ?? []
-  const hasRecordByDay = records.map(r => !!r.recordId)
   const dateLabels = getDateLabels(records)
   const daysUntilReport = getDaysUntilSunday()
   const isReportReady = daysUntilReport === 0
 
   if (isLoading) {
     return (
-      <div className="relative min-h-dvh bg-gray-600">
+      <div className="flex min-h-dvh flex-col bg-gray-600">
         <HomeTabs />
       </div>
     )
@@ -63,7 +62,7 @@ function Home() {
 
   if (isError) {
     return (
-      <div className="relative min-h-dvh bg-gray-600">
+      <div className="flex min-h-dvh flex-col bg-gray-600">
         <HomeTabs />
         <div className="flex items-center justify-center pt-20">
           <p className="text-white">데이터를 불러오지 못했습니다</p>
@@ -73,14 +72,13 @@ function Home() {
   }
 
   return (
-    <div className="relative min-h-dvh bg-gray-600">
+    <div className="flex min-h-dvh flex-col bg-gray-600">
       <HomeTabs />
 
       <HeroSection />
 
       <DaySelector
         selectedIndex={selectedDay}
-        hasRecordByDay={hasRecordByDay}
         onSelect={setSelectedDay}
       />
 
