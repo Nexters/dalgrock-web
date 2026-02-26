@@ -65,7 +65,9 @@ export function MusicSearchStep({
               <SearchedMusicItem
                 key={music.id}
                 {...music}
-                isSelected={selectedMusics.some(m => m.id === music.id)}
+                isSelected={selectedMusics.some(
+                  m => m.title === music.title && m.artist === music.artist
+                )}
                 onClick={() => onMusicToggle(music)}
               />
             ))}

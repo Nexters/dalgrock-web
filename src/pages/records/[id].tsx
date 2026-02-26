@@ -57,10 +57,16 @@ function RecordEditView({
   })
 
   const handleMusicToggle = (music: Music) => {
-    const isSelected = musicsField.value.some(m => m.id === music.id)
+    const isSelected = musicsField.value.some(
+      m => m.title === music.title && m.artist === music.artist
+    )
 
     if (isSelected) {
-      musicsField.onChange(musicsField.value.filter(m => m.id !== music.id))
+      musicsField.onChange(
+        musicsField.value.filter(
+          m => !(m.title === music.title && m.artist === music.artist)
+        )
+      )
     } else {
       musicsField.onChange([...musicsField.value, music])
     }
