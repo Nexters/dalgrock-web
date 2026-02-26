@@ -17,7 +17,7 @@ export function MusicItem({ albumArt, title, artist }: MusicItemProps) {
         <div className="size-[40px] shrink-0 rounded-md bg-gray-200" />
       )}
 
-      <div className="flex flex-col gap-1">
+      <div className="flex min-w-0 flex-col gap-1">
         <p className="truncate text-white text-sm">{title}</p>
         <p className="truncate text-gray-400 text-xs">{artist}</p>
       </div>
