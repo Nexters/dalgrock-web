@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { Header } from '@/components/header'
 import { getRecord } from '@/apis/generated/record/record'
 import { recordsQueries } from '@/apis/records/queries'
+import type { UpdateRecordRequest } from '@/apis/generated/models'
 import type { Music, RecordFormData } from '@/types/record'
 import DeleteRecordButton from './_components/delete-record-button'
 import { DetailSection } from './_components/detail-section'
@@ -34,14 +35,18 @@ function formatRecordDate(dateStr: string): string {
 }
 
 function RecordEditView({
+  recordId,
   editStep,
   onComplete,
   defaultValues
 }: {
+  recordId: number
   editStep: EditStep
   onComplete: () => void
   defaultValues: RecordFormData
 }) {
+  const queryClient = useQueryClient()
+
   const methods = useForm<RecordFormData>({
     defaultValues
   })
@@ -61,11 +66,44 @@ function RecordEditView({
     }
   }
 
+  const { mutate: updateRecordMutate, isPending: isUpdatePending } =
+    useMutation({
+      mutationFn: (request: UpdateRecordRequest) =>
+        recordv1UpdateRecord(recordId, request),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: recordsQueries.all })
+        toast.success('기록이 수정되었어요')
+        onComplete()
+      },
+      onError: () => {
+        toast.error('기록 수정에 실패했습니다')
+      }
+    })
+
   const handleComplete = () => {
-    // TODO: 수정 API 호출
-    const recordData = methods.getValues()
-    console.log('기록 수정:', recordData)
-    onComplete()
+    const formData = methods.getValues()
+
+    if (editStep === 'music') {
+      updateRecordMutate({
+        type: 'musics',
+        data: formData.musics.map(({ title, artist, albumArt, genre }) => ({
+          title,
+          artist,
+          thumbnail: albumArt,
+          genre
+        })) as unknown as UpdateRecordRequest['data']
+      })
+    } else if (editStep === 'emotion') {
+      updateRecordMutate({
+        type: 'emotions',
+        data: formData.emotions as unknown as UpdateRecordRequest['data']
+      })
+    } else if (editStep === 'memo') {
+      updateRecordMutate({
+        type: 'content',
+        data: (formData.memo || '') as unknown as UpdateRecordRequest['data']
+      })
+    }
   }
 
   return (
@@ -93,6 +131,7 @@ function RecordEditView({
           {editStep === 'memo' && (
             <MemoStep
               onComplete={handleComplete}
+              isPending={isUpdatePending}
               submitLabel="저장"
             />
           )}
@@ -102,7 +141,7 @@ function RecordEditView({
   )
 }
 
-const { recordv1DeleteRecord } = getRecord()
+const { recordv1DeleteRecord, recordv1UpdateRecord } = getRecord()
 
 function RecordDetail() {
   const { id } = useParams()
@@ -170,6 +209,7 @@ function RecordDetail() {
   if (editStep) {
     return (
       <RecordEditView
+        recordId={recordId}
         editStep={editStep}
         onComplete={handleEditComplete}
         defaultValues={{
