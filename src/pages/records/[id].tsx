@@ -1,8 +1,15 @@
 import { useForm, FormProvider, useController } from 'react-hook-form'
-import { useParams, useSearchParams, useLocation } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import {
+  useParams,
+  useSearchParams,
+  useLocation,
+  useNavigate
+} from 'react-router-dom'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { Header } from '@/components/header'
+import { getRecord } from '@/apis/generated/record/record'
 import { recordsQueries } from '@/apis/records/queries'
 import type { Music, RecordFormData } from '@/types/record'
 import DeleteRecordButton from './_components/delete-record-button'
@@ -95,19 +102,23 @@ function RecordEditView({
   )
 }
 
+const { recordv1DeleteRecord } = getRecord()
+
 function RecordDetail() {
   const { id } = useParams()
   const location = useLocation()
+  const routerNavigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const editStep = searchParams.get('edit') as EditStep | null
 
   const recordId = Number(id)
   const createdAt = (location.state as { createdAt?: string })?.createdAt
 
+  const queryClient = useQueryClient()
+
   const { data: record, isLoading: isRecordLoading } = useQuery(
     recordsQueries.getRecordDetail(recordId)
   )
-  console.log(record)
 
   const musics: Music[] =
     record?.music?.map((m, i) => ({
@@ -129,9 +140,20 @@ function RecordDetail() {
     setSearchParams({})
   }
 
+  const { mutate: deleteRecordMutate } = useMutation({
+    mutationFn: () => recordv1DeleteRecord(recordId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: recordsQueries.all })
+      routerNavigate('/records')
+      toast.success('기록이 삭제되었어요')
+    },
+    onError: () => {
+      toast.error('기록 삭제에 실패했습니다')
+    }
+  })
+
   const handleDelete = () => {
-    // TODO: 삭제 API 호출
-    console.log('삭제 확인', id)
+    deleteRecordMutate()
   }
 
   if (isRecordLoading) {

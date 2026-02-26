@@ -83,7 +83,7 @@ function RecordNew() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: recordsQueries.all })
         toast.success('기록이 완료되었어요!')
-        routerNavigate('/records')
+        routerNavigate('/')
       },
       onError: () => {
         toast.error('기록 저장에 실패했습니다')
