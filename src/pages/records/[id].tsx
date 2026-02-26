@@ -189,7 +189,7 @@ function RecordDetail() {
     mutationFn: () => recordv1DeleteRecord(recordId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: recordsQueries.all })
-      routerNavigate('/records')
+      routerNavigate('/')
       toast.success('기록이 삭제되었어요')
     },
     onError: () => {
