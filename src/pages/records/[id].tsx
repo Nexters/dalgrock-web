@@ -232,6 +232,7 @@ function RecordDetail() {
   return (
     <div>
       <Header
+        onBack={() => routerNavigate('/records')}
         midChild={
           createdAt ? (
             <p className="text-gray-0 text-lg">{formatRecordDate(createdAt)}</p>

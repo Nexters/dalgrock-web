@@ -1,11 +1,13 @@
 import { queryOptions } from '@tanstack/react-query'
 
 import { getRecord } from '@/apis/generated/record/record'
-import { getWeekly } from '@/apis/generated/weekly/weekly'
 import { getQueryKeyHelper } from '@/utils/query'
 
-const { recordv1GetRecords, recordv1GetRecordDetail } = getRecord()
-const { weeklyv1GetWeeklyRecords } = getWeekly()
+const {
+  recordv1GetRecords,
+  recordv1GetRecordDetail,
+  recordv1GetMonthlyRecords
+} = getRecord()
 
 export const recordsQueries = {
   ...getQueryKeyHelper('records'),
@@ -19,11 +21,11 @@ export const recordsQueries = {
       }
     }),
 
-  getMonthlyWeeklyRecords: (params: { year: number; month: number }) =>
+  getMonthlyRecords: (params: { year: number; month: number }) =>
     queryOptions({
-      queryKey: recordsQueries.detail('monthlyWeeklyRecords', params),
+      queryKey: recordsQueries.detail('monthlyRecords', params),
       queryFn: async () => {
-        const { data } = await weeklyv1GetWeeklyRecords(params)
+        const { data } = await recordv1GetMonthlyRecords(params)
         return data
       }
     }),

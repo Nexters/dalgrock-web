@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import useIntersectionObserver from '@/hooks/useIntersectionObserver'
+import type { RecordItem } from '@/apis/generated/models'
 
 interface RecordScrollListProps {
-  records: { id: string }[]
-  onRecordClick: (recordId: string) => void
+  records: RecordItem[]
+  onRecordClick: (recordId: number) => void
 }
 
 function RecordScrollList({ records, onRecordClick }: RecordScrollListProps) {
@@ -36,13 +37,24 @@ function RecordScrollList({ records, onRecordClick }: RecordScrollListProps) {
           ref={leftSentinelRef}
           className="shrink-0 w-px"
         />
-        {records.map(record => (
-          <button
-            key={record.id}
-            className="rounded-full size-20 bg-gray-200 shrink-0 cursor-pointer"
-            onClick={() => onRecordClick(record.id)}
-          />
-        ))}
+        {records.map(record => {
+          const thumbnail = record.musics?.[0]?.thumbnail
+
+          return (
+            <button
+              key={record.recordId}
+              className="rounded-full size-20 shrink-0 cursor-pointer overflow-hidden bg-gray-200"
+              onClick={() => onRecordClick(record.recordId!)}>
+              {thumbnail && (
+                <img
+                  src={thumbnail}
+                  alt="앨범 커버"
+                  className="size-full object-cover"
+                />
+              )}
+            </button>
+          )
+        })}
         <div
           ref={rightSentinelRef}
           className="shrink-0 w-px"
