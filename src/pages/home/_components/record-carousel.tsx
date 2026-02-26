@@ -86,7 +86,8 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
       <div className="relative flex h-[320px] w-[180px] items-center justify-center">
         {hasRecord && thumbnails.length > 0 ? (
           <Link
-            to={`/records/${record.createdAt?.split('T')[0]}`}
+            to={`/records/${record.recordId}`}
+            state={{ createdAt: record.createdAt }}
             className="relative z-10 h-full w-full">
             <StackedAlbums thumbnails={thumbnails} />
           </Link>
