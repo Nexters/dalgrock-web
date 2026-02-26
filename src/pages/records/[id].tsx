@@ -263,7 +263,7 @@ function RecordDetail() {
           <DetailSection
             label="함께 느낀 감정"
             onEdit={() => handleEdit('emotion')}>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {emotions.map(emotion => (
                 <Tag
                   key={emotion}
