@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm, FormProvider, useController } from 'react-hook-form'
 import {
   useParams,
@@ -50,6 +51,11 @@ function RecordEditView({
   const methods = useForm<RecordFormData>({
     defaultValues
   })
+
+  useEffect(() => {
+    methods.reset(defaultValues)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const { field: musicsField } = useController({
     name: 'musics',
