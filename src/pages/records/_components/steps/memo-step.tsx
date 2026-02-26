@@ -4,46 +4,41 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import type { RecordFormData } from '@/types/record'
 import { TagSelector } from '../tag-selector'
+import { LoaderCircle } from 'lucide-react'
 
-const CATEGORISED_MOMENT_TAGS = [
-  { id: 'commute', label: '출퇴근길' },
-  { id: 'drive', label: '운전 중' },
-  { id: 'workout', label: '운동' },
-  { id: 'walk', label: '산책' },
-  { id: 'reading', label: '독서' },
-  { id: 'running', label: '러닝' },
-  { id: 'study', label: '공부' },
-  { id: 'work', label: '작업' },
-  { id: 'job', label: '업무' },
-  { id: 'housework', label: '집안일' },
-  { id: 'shower', label: '샤워' },
-  { id: 'rest', label: '휴식' },
-  { id: 'date', label: '데이트' },
-  { id: 'night', label: '자기 전' },
-  { id: 'nap', label: '낮잠' },
-  { id: 'morning', label: '아침' }
+const MOMENT_TAGS = [
+  '출근길',
+  '퇴근길',
+  '드라이브',
+  '산책',
+  '운동',
+  '독서',
+  '공부',
+  '작업 중',
+  '업무 중',
+  '집안일',
+  '샤워 중',
+  '데이트',
+  '잠들기 전',
+  '낮잠',
+  '기상했을 때'
 ] as const
 
 interface MemoStepProps {
   onComplete: () => void
+  isPending?: boolean
   submitLabel?: string
 }
 
 export function MemoStep({
   onComplete,
+  isPending = false,
   submitLabel = '기록 완료'
 }: MemoStepProps) {
-  const { control, getValues } = useFormContext<RecordFormData>()
+  const { control } = useFormContext<RecordFormData>()
 
   const { field: momentField } = useController({ name: 'moment', control })
   const { field: memoField } = useController({ name: 'memo', control })
-
-  const handleSubmit = () => {
-    // TODO: API 연동
-    const recordData = getValues()
-    console.log('기록 저장:', recordData)
-    onComplete()
-  }
 
   return (
     <>
@@ -54,7 +49,7 @@ export function MemoStep({
 
         <div className="flex flex-col gap-12">
           <TagSelector
-            tags={CATEGORISED_MOMENT_TAGS}
+            tags={MOMENT_TAGS}
             selectedId={momentField.value}
             onChange={momentField.onChange}
           />
@@ -78,8 +73,13 @@ export function MemoStep({
           variant="primary"
           className="w-full h-[52px]"
           size="lg"
-          onClick={handleSubmit}>
-          {submitLabel}
+          disabled={isPending}
+          onClick={onComplete}>
+          {isPending ? (
+            <LoaderCircle className="size-5 animate-spin" />
+          ) : (
+            submitLabel
+          )}
         </Button>
       </div>
     </>

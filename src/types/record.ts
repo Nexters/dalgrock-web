@@ -3,6 +3,7 @@ export interface Music {
   title: string
   artist: string
   albumArt?: string
+  genre?: string
 }
 
 export interface RecordFormData {

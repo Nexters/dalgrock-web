@@ -32,7 +32,7 @@ function DeleteRecordButton({ onDelete }: DeleteRecordButtonProps) {
       <ConfirmDialog
         open={isOpen}
         onOpenChange={setIsOpen}>
-        <ConfirmDialogContent className="pt-6 pb-4 px-4 gap-1">
+        <ConfirmDialogContent className="max-w-[320px] pt-6 pb-4 px-4 gap-1">
           <ConfirmDialogTitle>기록을 삭제하시겠어요?</ConfirmDialogTitle>
           <ConfirmDialogDescription>
             삭제된 기록은 복구할 수 없어요.

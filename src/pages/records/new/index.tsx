@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useForm, FormProvider, useController } from 'react-hook-form'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'motion/react'
+import { toast } from 'sonner'
 
 import { Header } from '@/components/header'
 import {
@@ -8,10 +11,14 @@ import {
   EmotionSelectStep,
   MemoStep
 } from '../_components/steps'
-import { RecordCompleteStep } from '../_components/steps'
+import { getRecord } from '@/apis/generated/record/record'
+import { recordsQueries } from '@/apis/records/queries'
+import type { CreateRecordRequest } from '@/apis/generated/models'
 import type { Music, RecordFormData } from '@/types/record'
 
-type FunnelStep = 'search' | 'emotion' | 'memo' | 'complete'
+const { recordv1CreateRecord } = getRecord()
+
+type FunnelStep = 'search' | 'emotion' | 'memo'
 type Direction = 'forward' | 'backward'
 
 const SLIDE_TRANSITION = {
@@ -19,12 +26,6 @@ const SLIDE_TRANSITION = {
   ease: 'easeInOut' as const,
   duration: 0.25
 }
-const FADE_TRANSITION = {
-  type: 'tween' as const,
-  ease: 'easeInOut' as const,
-  duration: 0.3
-}
-
 const slideVariants = {
   enter: (direction: Direction) => ({
     x: direction === 'forward' ? '100%' : '-100%',
@@ -37,13 +38,8 @@ const slideVariants = {
   })
 }
 
-const fadeVariants = {
-  enter: { opacity: 0 },
-  center: { opacity: 1 },
-  exit: { opacity: 0 }
-}
-
 function RecordNew() {
+  const routerNavigate = useNavigate()
   const [step, setStep] = useState<FunnelStep>('search')
   const [direction, setDirection] = useState<Direction>('forward')
 
@@ -63,10 +59,16 @@ function RecordNew() {
   })
 
   const handleMusicToggle = (music: Music) => {
-    const isSelected = musicsField.value.some(m => m.id === music.id)
+    const isSelected = musicsField.value.some(
+      m => m.title === music.title && m.artist === music.artist
+    )
 
     if (isSelected) {
-      musicsField.onChange(musicsField.value.filter(m => m.id !== music.id))
+      musicsField.onChange(
+        musicsField.value.filter(
+          m => !(m.title === music.title && m.artist === music.artist)
+        )
+      )
     } else {
       musicsField.onChange([...musicsField.value, music])
     }
@@ -76,6 +78,41 @@ function RecordNew() {
     setDirection(dir)
     setStep(target)
     if (dir === 'forward') window.scrollTo(0, 0)
+  }
+
+  const queryClient = useQueryClient()
+
+  const { mutate: createRecordMutate, isPending: isCreatePending } =
+    useMutation({
+      mutationFn: (request: CreateRecordRequest) =>
+        recordv1CreateRecord(request),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: recordsQueries.all })
+        toast.success('기록이 완료되었어요!')
+        routerNavigate('/')
+      },
+      onError: () => {
+        toast.error('기록 저장에 실패했습니다')
+      }
+    })
+
+  const handleRecordSubmit = () => {
+    const formData = methods.getValues()
+
+    const request: CreateRecordRequest = {
+      musics: formData.musics.map(({ title, artist, albumArt, genre }) => ({
+        title,
+        artist,
+        thumbnail: albumArt,
+        genre
+      })),
+      emotions: formData.emotions,
+      content: formData.memo || undefined,
+      situations: formData.moment ? [formData.moment] : undefined,
+      location: formData.place || undefined
+    }
+
+    createRecordMutate(request)
   }
 
   const handleSearchNext = () => {
@@ -143,20 +180,10 @@ function RecordNew() {
                 exit="exit"
                 transition={SLIDE_TRANSITION}
                 className="flex flex-1 flex-col">
-                <MemoStep onComplete={() => navigate('complete', 'forward')} />
-              </motion.div>
-            )}
-
-            {step === 'complete' && (
-              <motion.div
-                key="complete"
-                variants={fadeVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={FADE_TRANSITION}
-                className="flex flex-1 flex-col">
-                <RecordCompleteStep />
+                <MemoStep
+                  onComplete={handleRecordSubmit}
+                  isPending={isCreatePending}
+                />
               </motion.div>
             )}
           </AnimatePresence>

@@ -31,9 +31,9 @@ export function CircleArrowIcon({
       <path
         d={path}
         stroke="#9EA4B2"
-        stroke-width="1.33333"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )

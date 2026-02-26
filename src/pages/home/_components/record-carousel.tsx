@@ -86,7 +86,8 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
       <div className="relative flex h-[320px] w-[180px] items-center justify-center">
         {hasRecord && thumbnails.length > 0 ? (
           <Link
-            to={`/records/${record.createdAt?.split('T')[0]}`}
+            to={`/records/${record.recordId}`}
+            state={{ createdAt: record.createdAt }}
             className="relative z-10 h-full w-full">
             <StackedAlbums thumbnails={thumbnails} />
           </Link>
@@ -142,7 +143,7 @@ function StackedAlbums({ thumbnails }: { thumbnails: string[] }) {
     <div className="relative h-full w-full">
       {thumbnails.map((thumb, i) => {
         const count = thumbnails.length
-        const topOffset = i === 0 ? (count === 1 ? 40 : 0) : i * 64
+        const bottomOffset = i === 0 ? (count === 1 ? 40 : 0) : i * 64
 
         return (
           <img
@@ -150,11 +151,11 @@ function StackedAlbums({ thumbnails }: { thumbnails: string[] }) {
             src={thumb}
             alt="앨범 커버"
             className={cn(
-              'absolute left-0 h-[148px] w-[148px] rounded-full object-cover',
+              'absolute left-1/2 -translate-x-1/2 h-[148px] w-[148px] rounded-full object-cover',
               i > 0 && 'border border-white/30'
             )}
             style={{
-              top: topOffset,
+              bottom: bottomOffset,
               zIndex: count - i
             }}
           />

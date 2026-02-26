@@ -18,7 +18,8 @@ export const musicsQueries = {
           id: item.spotifyId ?? '',
           title: item.title ?? '',
           artist: item.artist ?? '',
-          albumArt: item.thumbnail
+          albumArt: item.thumbnail,
+          genre: item.genre
         }))
       },
       enabled: keyword.trim().length > 0
