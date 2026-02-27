@@ -38,7 +38,7 @@ function RecordScrollList({ records, onRecordClick }: RecordScrollListProps) {
           className="shrink-0 w-px"
         />
         {records.map(record => {
-          const thumbnail = record.musics?.[0]?.thumbnail
+          const thumbnail = record?.thumbnail
 
           return (
             <button

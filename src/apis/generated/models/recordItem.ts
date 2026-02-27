@@ -13,4 +13,5 @@ export interface RecordItem {
   musics?: MusicThumbnailItem[]
   emotions?: string[]
   isToday?: boolean
+  thumbnail?: string
 }
