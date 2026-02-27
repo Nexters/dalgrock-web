@@ -5,14 +5,31 @@
  * Pliview API 문서
  * OpenAPI spec version: 1.0.0
  */
+import type {
+  TestGenerateWeeklyReport200,
+  TestGenerateWeeklyReportParams
+} from '.././models'
+
 import { api } from '../../instance'
 
 export const getTestController = () => {
+  const testGenerateWeeklyReport = (params: TestGenerateWeeklyReportParams) => {
+    return api<TestGenerateWeeklyReport200>({
+      url: `/test/weekly-report`,
+      method: 'GET',
+      params
+    })
+  }
   const testGenerateToken = () => {
     return api<string>({ url: `/test/token`, method: 'GET' })
   }
-  return { testGenerateToken }
+  return { testGenerateWeeklyReport, testGenerateToken }
 }
+export type TestGenerateWeeklyReportResult = NonNullable<
+  Awaited<
+    ReturnType<ReturnType<typeof getTestController>['testGenerateWeeklyReport']>
+  >
+>
 export type TestGenerateTokenResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getTestController>['testGenerateToken']>>
 >
