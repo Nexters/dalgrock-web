@@ -86,7 +86,7 @@ function RecordItem({ record, date, dateLabel }: RecordItemProps) {
   const remainingCount = emotions.length - 2
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pb-4">
       <div className="relative flex h-[320px] w-[180px] items-center justify-center">
         {hasRecord && thumbnails.length > 0 ? (
           <Link
