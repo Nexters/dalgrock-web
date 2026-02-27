@@ -9,6 +9,7 @@ import { HeroSection } from './_components/hero-section'
 import { HomeTabs } from './_components/home-tabs'
 import { RecordCarousel } from './_components/record-carousel'
 import { ReportCTA } from './_components/report-cta'
+import { reportsQueries } from '@/apis/reports/queries'
 
 function getMonday(): Date {
   const now = new Date()
@@ -57,11 +58,19 @@ function Home() {
     isError
   } = useQuery(recordsQueries.getWeeklySlotRecords())
 
+  const { data: monthlyReportData } = useQuery(
+    reportsQueries.getMonthlyReports({
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1
+    })
+  )
+
   const records = weeklySlotData?.records ?? []
   const weekDates = getWeekDates(records)
   const dateLabels = getDateLabels(weekDates)
   const daysUntilReport = getDaysUntilSunday()
-  const isReportReady = daysUntilReport === 0
+  const isReportReady =
+    daysUntilReport === 0 && !!monthlyReportData?.weekly?.length
 
   if (isLoading) {
     return (
