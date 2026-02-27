@@ -56,40 +56,43 @@ function Login() {
   }
 
   return (
-    <div className="h-dvh flex flex-col overflow-hidden bg-gray-600">
-      <div
-        className="flex-1 overflow-hidden"
-        ref={emblaRef}>
-        <div className="flex h-full touch-pan-y">
-          {SLIDES.map((slide, index) => (
+    <div className="h-dvh flex flex-col bg-gray-600">
+      <div className="flex-1 flex flex-col gap-8 pb-24 overflow-hidden">
+        <div
+          className="w-full overflow-hidden"
+          ref={emblaRef}>
+          <div className="flex touch-pan-y">
+            {SLIDES.map((slide, index) => (
+              <div
+                key={index}
+                className="flex-[0_0_100%]">
+                <img
+                  src={slide.image}
+                  alt={slide.alt}
+                  className="w-full h-auto"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <h1 className="shrink-0 mx-5 text-[28px] font-bold text-white whitespace-pre-line">
+          {SLIDES[selectedIndex].title}
+        </h1>
+
+        <div className="shrink-0 flex justify-center gap-1.5">
+          {SLIDES.map((_, index) => (
             <div
               key={index}
-              className="flex-[0_0_100%] h-full flex flex-col">
-              <img
-                src={slide.image}
-                alt={slide.alt}
-                className="object-contain"
-              />
-              <h1 className="mx-5 mt-14 text-[28px] font-bold text-white whitespace-pre-line">
-                {slide.title}
-              </h1>
-            </div>
+              className={cn(
+                'h-1.5 rounded-full transition-all duration-300',
+                index === selectedIndex
+                  ? 'w-4 h-1 bg-gray-100'
+                  : 'w-1 h-1 bg-gray-400'
+              )}
+            />
           ))}
         </div>
-      </div>
-
-      <div className="shrink-0 flex justify-center gap-1.5 pt-4 pb-[164px]">
-        {SLIDES.map((_, index) => (
-          <div
-            key={index}
-            className={cn(
-              'h-1.5 rounded-full transition-all duration-300',
-              index === selectedIndex
-                ? 'w-4 h-1 bg-gray-100'
-                : 'w-1 h-1 bg-gray-400'
-            )}
-          />
-        ))}
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 max-w-[536px] mx-auto bg-gradient-to-t from-gray-600 to-transparent px-5 pb-8 pt-12">
