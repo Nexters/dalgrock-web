@@ -121,7 +121,7 @@ function RecordNew() {
       content: formData.memo || undefined,
       situations: formData.moment ? [formData.moment] : undefined,
       location: formData.place || undefined,
-      ...(isPastDate && {
+      ...(isPastDate && recordDate && {
         year: new Date(recordDate).getFullYear(),
         month: new Date(recordDate).getMonth() + 1,
         day: new Date(recordDate).getDate()
