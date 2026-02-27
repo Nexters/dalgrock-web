@@ -61,9 +61,10 @@ export function MusicSearchStep({
           )}
 
           {!isSearchLoading &&
+            keyword.trim() &&
             searchResults.map(music => (
               <SearchedMusicItem
-                key={music.id}
+                key={`${music.id}-${music.title}-${music.artist}`}
                 {...music}
                 isSelected={selectedMusics.some(
                   m => m.title === music.title && m.artist === music.artist
