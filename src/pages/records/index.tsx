@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Header } from '@/components/header'
 import { ArrowIcon } from '@/components/icons'
 import { recordsQueries } from '@/apis/records/queries'
+import { reportsQueries } from '@/apis/reports/queries'
 import { WeeklySectionLayout } from './_components/weekly-section-layout'
 import RecordScrollList from './_components/record-scroll-list'
 import { MonthSelector } from '../reports/_components/month-selector'
@@ -20,6 +21,10 @@ function Records() {
 
   const { data: monthlyData, isLoading: isMonthlyLoading } = useQuery(
     recordsQueries.getMonthlyRecords({ year, month })
+  )
+
+  const { data: monthlyReportsData } = useQuery(
+    reportsQueries.getMonthlyReports({ year, month })
   )
 
   const weeklyRecords = monthlyData?.weekly ?? []
@@ -42,8 +47,11 @@ function Records() {
     }
   }
 
-  const handleNavigateToReport = (reportId: string) => {
-    navigate(`/reports/${reportId}`)
+  const handleNavigateToReport = (week: number) => {
+    const weekReport = monthlyReportsData?.weekly?.find(r => r.week === week)
+    navigate(`/reports/${year}-${String(month).padStart(2, '0')}-${week}`, {
+      state: { year, month, reportId: weekReport?.reportId }
+    })
   }
 
   const handleNavigateToRecord = (recordId: number) => {
@@ -92,9 +100,7 @@ function Records() {
                           <button
                             className="flex items-center gap-2 cursor-pointer"
                             onClick={() =>
-                              handleNavigateToReport(
-                                `report-${year}-${String(month).padStart(2, '0')}-w${weeklyRecord.week}`
-                              )
+                              handleNavigateToReport(weeklyRecord.week ?? 0)
                             }>
                             <ArrowIcon
                               direction="right"
