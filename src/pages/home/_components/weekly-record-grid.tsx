@@ -40,6 +40,9 @@ function WeeklyRecordSection({ weekLabel, records }: WeeklyRecordSectionProps) {
                 to={
                   record.hasRecord ? `/records/${record.date}` : '/records/new'
                 }
+                state={
+                  !record.hasRecord ? { recordDate: record.date } : undefined
+                }
                 className="flex flex-col items-center gap-2">
                 <div className="flex h-[74px] w-[74px] items-center justify-center rounded-full bg-[#262930]">
                   {record.hasRecord && record.albumImage ? (

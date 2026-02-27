@@ -29,11 +29,21 @@ function getDaysUntilSunday(): number {
   return day === 0 ? 0 : 7 - day
 }
 
-function getDateLabels(records: RecordItem[]): string[] {
+function getWeekDates(records: RecordItem[]): string[] {
   const monday = getMonday()
   return records.map((_, index) => {
     const date = new Date(monday)
     date.setDate(monday.getDate() + index)
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
+  })
+}
+
+function getDateLabels(dates: string[]): string[] {
+  return dates.map(iso => {
+    const date = new Date(iso)
     return `${date.getMonth() + 1}월 ${date.getDate()}일`
   })
 }
@@ -48,7 +58,8 @@ function Home() {
   } = useQuery(recordsQueries.getWeeklySlotRecords())
 
   const records = weeklySlotData?.records ?? []
-  const dateLabels = getDateLabels(records)
+  const weekDates = getWeekDates(records)
+  const dateLabels = getDateLabels(weekDates)
   const daysUntilReport = getDaysUntilSunday()
   const isReportReady = daysUntilReport === 0
 
@@ -86,6 +97,7 @@ function Home() {
         records={records}
         selectedIndex={selectedDay}
         onIndexChange={setSelectedDay}
+        dates={weekDates}
         dateLabels={dateLabels}
       />
 

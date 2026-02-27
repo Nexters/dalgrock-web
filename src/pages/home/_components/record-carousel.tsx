@@ -11,6 +11,7 @@ interface RecordCarouselProps {
   records: RecordItem[]
   selectedIndex: number
   onIndexChange: (index: number) => void
+  dates: string[]
   dateLabels: string[]
 }
 
@@ -18,6 +19,7 @@ function RecordCarousel({
   records,
   selectedIndex,
   onIndexChange,
+  dates,
   dateLabels
 }: RecordCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -56,6 +58,7 @@ function RecordCarousel({
             className="min-w-0 flex-[0_0_203px]">
             <RecordItem
               record={record}
+              date={dates[index] ?? ''}
               dateLabel={dateLabels[index] ?? ''}
             />
           </div>
@@ -67,10 +70,11 @@ function RecordCarousel({
 
 interface RecordItemProps {
   record: RecordItem
+  date: string
   dateLabel: string
 }
 
-function RecordItem({ record, dateLabel }: RecordItemProps) {
+function RecordItem({ record, date, dateLabel }: RecordItemProps) {
   const hasRecord = !!record.recordId
   const thumbnails = (record.musics ?? [])
     .map(m => m.thumbnail)
@@ -94,6 +98,7 @@ function RecordItem({ record, dateLabel }: RecordItemProps) {
         ) : (
           <Link
             to="/records/new"
+            state={{ recordDate: date }}
             className="z-10 mb-[40px] flex flex-col items-center">
             <div
               className="flex h-[148px] w-[148px] flex-col items-center justify-center rounded-full bg-[#262930]"

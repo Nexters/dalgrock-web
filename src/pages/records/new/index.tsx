@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useForm, FormProvider, useController } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'motion/react'
@@ -40,6 +40,8 @@ const slideVariants = {
 
 function RecordNew() {
   const routerNavigate = useNavigate()
+  const location = useLocation()
+  const recordDate = (location.state as { recordDate?: string })?.recordDate
   const [step, setStep] = useState<FunnelStep>('search')
   const [direction, setDirection] = useState<Direction>('forward')
 
@@ -99,6 +101,15 @@ function RecordNew() {
   const handleRecordSubmit = () => {
     const formData = methods.getValues()
 
+    const isPastDate = (() => {
+      if (!recordDate) return false
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const target = new Date(recordDate)
+      target.setHours(0, 0, 0, 0)
+      return target.getTime() < today.getTime()
+    })()
+
     const request: CreateRecordRequest = {
       musics: formData.musics.map(({ title, artist, albumArt, genre }) => ({
         title,
@@ -109,7 +120,12 @@ function RecordNew() {
       emotions: formData.emotions,
       content: formData.memo || undefined,
       situations: formData.moment ? [formData.moment] : undefined,
-      location: formData.place || undefined
+      location: formData.place || undefined,
+      ...(isPastDate && {
+        year: new Date(recordDate).getFullYear(),
+        month: new Date(recordDate).getMonth() + 1,
+        day: new Date(recordDate).getDate()
+      })
     }
 
     createRecordMutate(request)

@@ -1,11 +1,6 @@
 import { useEffect } from 'react'
 import { useForm, FormProvider, useController } from 'react-hook-form'
-import {
-  useParams,
-  useSearchParams,
-  useLocation,
-  useNavigate
-} from 'react-router-dom'
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
@@ -157,13 +152,11 @@ const { recordv1DeleteRecord, recordv1UpdateRecord } = getRecord()
 
 function RecordDetail() {
   const { id } = useParams()
-  const location = useLocation()
   const routerNavigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const editStep = searchParams.get('edit') as EditStep | null
 
   const recordId = Number(id)
-  const createdAt = (location.state as { createdAt?: string })?.createdAt
 
   const queryClient = useQueryClient()
 
@@ -240,8 +233,10 @@ function RecordDetail() {
       <Header
         onBack={() => routerNavigate('/records')}
         midChild={
-          createdAt ? (
-            <p className="text-gray-0 text-lg">{formatRecordDate(createdAt)}</p>
+          record?.recordDate ? (
+            <p className="text-gray-0 text-lg">
+              {formatRecordDate(record.recordDate)}
+            </p>
           ) : undefined
         }
         rightChild={<DeleteRecordButton onDelete={handleDelete} />}
