@@ -1,96 +1,90 @@
 import { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { HomeTabs } from '../home/_components/home-tabs'
 import { MonthSelector } from './_components/month-selector'
 import { WeeklyReportCard } from './_components/weekly-report-card'
 import { EmptyState } from './_components/empty-state'
+import { reportsQueries } from '@/apis/reports/queries'
+import type { EmotionCategory } from './_components/emotion-constants'
 
 interface WeeklyReport {
   week: number
+  reportId?: number
   recordCount: number
-  isAnalyzing?: boolean
+  isAnalyzing: boolean
   title?: string
   tags?: string[]
+  emotionCategory?: EmotionCategory
+  representativeThumbnail?: string
+  thumbnails?: string[]
 }
 
-type MonthlyReports = Record<string, WeeklyReport[]>
+function getEmotionCategoryFromEmotions(
+  emotions?: string[]
+): EmotionCategory | undefined {
+  if (!emotions || emotions.length === 0) return undefined
 
-const MOCK_DATA: MonthlyReports = {
-  '2026-01': [
-    {
-      week: 4,
-      recordCount: 3,
-      isAnalyzing: true,
-      title: '센치했던 이번 주, 어쿠스틱과 함께했어요 🎵',
-      tags: ['위로', '전환']
-    },
-    {
-      week: 3,
-      recordCount: 3,
-      title: '활기찼던 한 주, 밝은 음악과 함께했어요 ☀️',
-      tags: ['행복', '설렘']
-    },
-    {
-      week: 2,
-      recordCount: 5,
-      title: '감성적인 한 주, 발라드와 함께했어요 🌙',
-      tags: ['슬픔', '그리움']
-    },
-    {
-      week: 1,
-      recordCount: 4,
-      title: '활동적인 한 주, 신나는 음악과 함께했어요 🎉',
-      tags: ['즐거움', '자유']
+  const emotionMap: Record<string, EmotionCategory> = {
+    행복: 'exciting',
+    설렘: 'exciting',
+    슬픔: 'calm',
+    그리움: 'calm',
+    사랑: 'complex',
+    복잡미묘: 'complex',
+    감사: 'warm',
+    따뜻함: 'warm',
+    불안: 'sharp',
+    긴장: 'sharp',
+    평온: 'calm',
+    위로: 'calm'
+  }
+
+  for (const emotion of emotions) {
+    if (emotionMap[emotion]) {
+      return emotionMap[emotion]
     }
-  ],
-  '2025-12': [
-    {
-      week: 5,
-      recordCount: 2,
-      title: '따뜻한 연말, 캐롤과 함께했어요 🎄',
-      tags: ['행복', '설렘']
-    },
-    {
-      week: 4,
-      recordCount: 4,
-      title: '바쁜 한 주, 경쾌한 음악으로 힘냈어요 💪',
-      tags: ['활력', '집중']
-    },
-    {
-      week: 3,
-      recordCount: 3,
-      title: '차분했던 한 주, 잔잔한 음악과 함께했어요 ☕',
-      tags: ['평온', '위로']
-    }
-  ],
-  '2025-10': [
-    {
-      week: 2,
-      recordCount: 3,
-      title: '가을 감성, 어쿠스틱과 함께했어요 🍂',
-      tags: ['감성', '그리움']
-    },
-    {
-      week: 1,
-      recordCount: 2,
-      title: '시원한 가을 날씨, 팝송으로 시작했어요 🌤️',
-      tags: ['상쾌함', '자유']
-    }
-  ]
+  }
+
+  return 'calm'
 }
 
 function Reports() {
   const navigate = useNavigate()
-  const [year, setYear] = useState(2026)
-  const [month, setMonth] = useState(1)
+  const location = useLocation()
+
+  const now = new Date()
+  const state = location.state as { year?: number; month?: number } | null
+  const [year, setYear] = useState(state?.year || now.getFullYear())
+  const [month, setMonth] = useState(state?.month || now.getMonth() + 1)
 
   const monthKey = useMemo(() => {
     return `${year}-${String(month).padStart(2, '0')}`
   }, [year, month])
 
+  const { data: apiResponse } = useSuspenseQuery(
+    reportsQueries.getMonthlyReports({ year, month })
+  )
+
   const currentReports = useMemo(() => {
-    return MOCK_DATA[monthKey] || []
-  }, [monthKey])
+    if (!apiResponse?.weekly) return []
+
+    return apiResponse.weekly.map(weekData => {
+      const isAnalyzing = weekData.status === 'ANALYZING'
+
+      return {
+        week: weekData.week ?? 0,
+        reportId: weekData.reportId,
+        recordCount: weekData.recordCount ?? 0,
+        isAnalyzing,
+        title: weekData.title,
+        tags: weekData.emotions,
+        emotionCategory: getEmotionCategoryFromEmotions(weekData.emotions),
+        representativeThumbnail: weekData.representativeThumbnail,
+        thumbnails: weekData.thumbnails
+      } as WeeklyReport
+    })
+  }, [apiResponse])
 
   const displayMonth = useMemo(() => {
     return `${String(year).slice(2)}년 ${month}월`
@@ -114,35 +108,33 @@ function Reports() {
     }
   }
 
-  const handleViewAll = () => {
-    console.log('전체보기')
-  }
-
-  const handleReportClick = (ym: string, week: number) => {
-    navigate(`/reports/${ym}-${week}`)
+  const handleReportClick = (
+    ym: string,
+    week: number,
+    isAnalyzing: boolean,
+    reportId?: number
+  ) => {
+    if (isAnalyzing) return
+    navigate(`/reports/${ym}-${week}`, {
+      state: { year, month, reportId }
+    })
   }
 
   return (
     <div className="min-h-dvh bg-gray-600">
       <HomeTabs />
 
-      <div className="flex items-center justify-between px-5 py-5 ml-4">
+      <div className="flex items-center justify-center px-5 py-5">
         <MonthSelector
           month={displayMonth}
           onPrevMonth={handlePrevMonth}
           onNextMonth={handleNextMonth}
         />
-
-        <button
-          onClick={handleViewAll}
-          className="text-[14px] text-[#9EA4B2] pr-4">
-          전체보기
-        </button>
       </div>
 
       <div className="flex flex-col gap-4 px-5 pb-6">
         {currentReports.length > 0 ? (
-          currentReports.map(report => (
+          currentReports.map((report: WeeklyReport) => (
             <WeeklyReportCard
               key={report.week}
               month={month}
@@ -151,7 +143,17 @@ function Reports() {
               isAnalyzing={report.isAnalyzing}
               title={report.title}
               tags={report.tags}
-              onClick={() => handleReportClick(monthKey, report.week)}
+              emotionCategory={report.emotionCategory}
+              representativeThumbnail={report.representativeThumbnail}
+              thumbnails={report.thumbnails}
+              onClick={() =>
+                handleReportClick(
+                  monthKey,
+                  report.week,
+                  report.isAnalyzing,
+                  report.reportId
+                )
+              }
             />
           ))
         ) : (
