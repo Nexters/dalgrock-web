@@ -28,21 +28,13 @@ function ReportCTA({ isReportReady, daysUntilReport }: ReportCTAProps) {
         className="mt-auto px-5 pb-6 pt-12"
         style={wrapperStyle}>
         <div className="flex flex-col items-center gap-3">
-          <p className="text-sm leading-[20px] tracking-[-0.25px] text-white">
-            <span className="font-bold">이번 주 분석 리포트</span>{' '}
-            <span
-              className="font-bold"
-              style={gradientText}>
-              도착!
-            </span>
-          </p>
           <Link
             to="/reports"
             className="flex h-12 w-full items-center justify-center rounded-xl text-[15px] font-semibold leading-[22px] text-[#16171c]"
             style={{
               background: 'linear-gradient(to bottom, #6af3df, #fff0b7)'
             }}>
-            분석 보러가기
+            이번주 분석 리포트 보러가기
           </Link>
         </div>
       </div>
