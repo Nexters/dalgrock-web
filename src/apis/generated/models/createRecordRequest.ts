@@ -21,4 +21,22 @@ export interface CreateRecordRequest {
   content?: string
   situations?: string[]
   location?: string
+  /**
+   * 기록 날짜(년). 옵셔널. year/month/day 셋 다 있으면 해당 날짜, 하나라도 없으면 오늘. 예: 2026
+   * @minimum 1900
+   * @maximum 2100
+   */
+  year?: number
+  /**
+   * 기록 날짜(월). 옵셔널. 1~12
+   * @minimum 1
+   * @maximum 12
+   */
+  month?: number
+  /**
+   * 기록 날짜(일). 옵셔널. 1~31
+   * @minimum 1
+   * @maximum 31
+   */
+  day?: number
 }

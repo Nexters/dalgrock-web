@@ -8,6 +8,7 @@
 import type { GetRecordMusicResponse } from './getRecordMusicResponse'
 
 export interface GetRecordDetailResponse {
+  recordDate?: string
   music?: GetRecordMusicResponse[]
   emotions?: string[]
   content?: string

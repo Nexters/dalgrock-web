@@ -22,7 +22,7 @@ export const getRecord = () => {
     return api<GetRecordResponse>({ url: `/v1/records`, method: 'GET' })
   }
   /**
-   * 오늘의 내 기록을 추가합니다
+   * 기록을 추가합니다. 날짜는 year, month, day를 각각 숫자로 보냅니다(예: 2026, 2, 21). 셋 중 하나라도 없으면 오늘 날짜로 등록됩니다.
    * @summary 내 기록 추가
    */
   const recordv1CreateRecord = (createRecordRequest: CreateRecordRequest) => {
