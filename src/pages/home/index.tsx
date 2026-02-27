@@ -10,6 +10,7 @@ import { HomeTabs } from './_components/home-tabs'
 import { RecordCarousel } from './_components/record-carousel'
 import { ReportCTA } from './_components/report-cta'
 import { reportsQueries } from '@/apis/reports/queries'
+import { MoreRecords } from './_components/more-records'
 
 function getMonday(): Date {
   const now = new Date()
@@ -109,6 +110,8 @@ function Home() {
         dates={weekDates}
         dateLabels={dateLabels}
       />
+
+      <MoreRecords />
 
       <ReportCTA
         isReportReady={isReportReady}
