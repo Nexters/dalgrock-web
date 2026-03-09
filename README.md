@@ -1,73 +1,15 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-])
-```
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fc3b23a9-2aa3-48ab-abdf-ed9ce57540b2" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b14d157b-306d-4b83-80c4-4c402523c9e4" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c5838388-817b-4bd0-b5ba-821643ec4771" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0181129b-6083-48c0-a357-2cd74468ebad" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/41f9bc9d-f51a-49cc-8f77-aa0b0d55684d" />
+<img width="1928" height="1088" alt="image" src="https://github.com/user-attachments/assets/98e75111-cc7a-4077-8114-dba1eea9ff0c" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c2421c24-236d-4589-b233-08a279b5f74c" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0b157732-39b8-4442-9472-5593af43427f" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/77270568-cafe-4f6f-a9df-5608627d033e" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/043ed825-5bbe-47d8-951f-92bd603ab065" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ebcb167d-a5cb-4e34-8b06-de3d5292e243" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/af1b9e9d-0d54-4fc6-b402-b7da610dacb5" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/05ae0cc7-e601-46b1-a208-a92d861724dc" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8a9a3ebb-a08f-453f-8548-539bb2f169a3" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6ca4123f-283f-4532-bd7c-f00db183a9a5" />
